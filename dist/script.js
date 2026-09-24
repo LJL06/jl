@@ -36,3 +36,27 @@ options.forEach((option, index) => {
     selectDirection(options[nextIndex].dataset.designOption);
   });
 });
+
+const waveTargets = document.querySelectorAll(
+  '.note-item, .project-card, .duet .featured',
+);
+
+waveTargets.forEach(target => {
+  target.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'touch') return;
+    target.classList.add('wave-active');
+  });
+
+  target.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
+    const bounds = target.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    target.style.setProperty('--wave-x', `${x}%`);
+    target.style.setProperty('--wave-y', `${y}%`);
+  });
+
+  target.addEventListener('pointerleave', () => {
+    target.classList.remove('wave-active');
+  });
+});
