@@ -1,17 +1,8 @@
 /* Moonstone: quiet silver tones, expressive Chinese display type, clear body text. */
-@font-face {
-  font-family: 'Luo';
-  src: url('https://cdn.jsdelivr.net/gh/tw93/Luo@main/dist/Luo-Regular.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+FF00-FFEF;
-}
-
 :root {
   --display: 'Cormorant Garamond', 'Baskerville', 'Times New Roman', serif;
   --body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --zh-display: 'Luo', 'STKaiti', 'KaiTi', serif;
+  --zh-display: 'LXGW WenKai GB', 'STKaiti', 'KaiTi', serif;
   font-family: var(--body);
   font-synthesis: none;
 }
@@ -205,7 +196,7 @@ h1 {
 
 .note-item.wave-active::after,
 .project-card.wave-active::after {
-  animation: cursor-ripple 1.5s cubic-bezier(.14, .68, .25, 1) infinite;
+  animation: cursor-ripple 1.25s cubic-bezier(.2, .72, .26, 1) both;
 }
 
 .note-item > *,
@@ -218,14 +209,30 @@ h1 {
 .note-item h3,
 .project-main h3,
 .featured-heading h2 {
-  transition: color .35s ease, transform .5s cubic-bezier(.2, .7, .2, 1);
+  transition: color .35s ease;
 }
 
 .note-item:hover h3,
 .project-card:hover h3,
 .featured:hover h2 {
   color: var(--accent);
-  transform: skewX(-2deg) translateX(3px);
+}
+
+.featured-heading h2,
+.note-item h3,
+.project-main h3 {
+  font-kerning: normal;
+}
+
+.glyph-wave {
+  display: inline-block;
+  transform: translate3d(0, var(--glyph-y, 0px), 0);
+  transition: transform .42s cubic-bezier(.2, .75, .25, 1);
+  will-change: transform;
+}
+
+.glyph-wave-active .glyph-wave {
+  transition-duration: .24s;
 }
 
 .hero-lede,
@@ -260,7 +267,7 @@ h1 {
 .note-item:hover h3,
 .project-card:hover h3,
 .featured:hover h2 {
-  transform: translateX(3px);
+  color: var(--accent);
 }
 
 .font-picker {
@@ -322,8 +329,8 @@ h1 {
   line-height: 1.1;
 }
 
-.font-luo .font-sample {
-  font-family: 'Luo', 'STKaiti', 'KaiTi', serif;
+.font-wenkai .font-sample {
+  font-family: 'LXGW WenKai GB', 'STKaiti', 'KaiTi', serif;
 }
 
 .font-smiley .font-sample {
@@ -360,8 +367,8 @@ h1 {
 }
 
 @keyframes cursor-ripple {
-  0% { opacity: .42; transform: translate(-50%, -50%) scale(.4); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(5.6); }
+  0% { opacity: .26; transform: translate(-50%, -50%) scale(.6); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(4.2); }
 }
 
 @media (max-width: 580px) {
@@ -405,5 +412,6 @@ h1 {
   .project-card.wave-active::after { animation: none !important; }
   .note-item::before,
   .project-card::before,
-  .duet .featured::before { transition: none; }
+  .duet .featured::before,
+  .glyph-wave { transition: none !important; }
 }
