@@ -37,38 +37,38 @@ options.forEach((option, index) => {
   });
 });
 
-const fontOptions = [...document.querySelectorAll('[data-font-option]')];
-const chineseFonts = ['song', 'xiaowei', 'brush'];
+const fontOptions = [...document.querySelectorAll('[data-title-font-option]')];
+const titleFonts = ['luo', 'smiley'];
 
-function selectChineseFont(font) {
-  if (!chineseFonts.includes(font)) return;
+function selectTitleFont(font) {
+  if (!titleFonts.includes(font)) return;
 
-  root.dataset.zhFont = font;
+  root.dataset.titleFont = font;
   fontOptions.forEach(option => {
     option.setAttribute(
       'aria-pressed',
-      String(option.dataset.fontOption === font),
+      String(option.dataset.titleFontOption === font),
     );
   });
 
   try {
-    localStorage.setItem('personal-site-zh-font', font);
+    localStorage.setItem('personal-site-title-font', font);
   } catch {
     // The selector still works if browser storage is unavailable.
   }
 }
 
-let savedChineseFont = root.dataset.zhFont || 'xiaowei';
+let savedTitleFont = root.dataset.titleFont || 'luo';
 try {
-  savedChineseFont = localStorage.getItem('personal-site-zh-font') || savedChineseFont;
+  savedTitleFont = localStorage.getItem('personal-site-title-font') || savedTitleFont;
 } catch {
   // Fall back to the page default if browser storage is unavailable.
 }
-selectChineseFont(savedChineseFont);
+selectTitleFont(savedTitleFont);
 
 fontOptions.forEach((option, index) => {
   option.addEventListener('click', () => {
-    selectChineseFont(option.dataset.fontOption);
+    selectTitleFont(option.dataset.titleFontOption);
   });
 
   option.addEventListener('keydown', event => {
@@ -77,7 +77,7 @@ fontOptions.forEach((option, index) => {
     const offset = event.key === 'ArrowRight' ? 1 : -1;
     const nextIndex = (index + offset + fontOptions.length) % fontOptions.length;
     fontOptions[nextIndex].focus();
-    selectChineseFont(fontOptions[nextIndex].dataset.fontOption);
+    selectTitleFont(fontOptions[nextIndex].dataset.titleFontOption);
   });
 });
 

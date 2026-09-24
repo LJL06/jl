@@ -1,10 +1,23 @@
-/* Moonstone: ink-brush Chinese, italic literary English, and a quiet tide. */
+/* Moonstone: quiet silver tones, expressive Chinese display type, clear body text. */
+@font-face {
+  font-family: 'Luo';
+  src: url('https://cdn.jsdelivr.net/gh/tw93/Luo@main/dist/Luo-Regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+FF00-FFEF;
+}
+
 :root {
   --display: 'Cormorant Garamond', 'Baskerville', 'Times New Roman', serif;
-  --calligraphy: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;
-  --body: var(--calligraphy);
-  font-family: var(--calligraphy);
-  font-synthesis: style weight;
+  --body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --zh-display: 'Luo', 'STKaiti', 'KaiTi', serif;
+  font-family: var(--body);
+  font-synthesis: none;
+}
+
+html[data-title-font="smiley"] {
+  --zh-display: 'Smiley Sans Oblique', 'Microsoft YaHei', sans-serif;
 }
 
 html {
@@ -22,7 +35,7 @@ body {
   z-index: 1;
   min-height: 100vh;
   background: transparent;
-  font-family: var(--calligraphy);
+  font-family: var(--body);
   font-size: 16px;
   line-height: 1.65;
 }
@@ -42,31 +55,6 @@ body::before {
   );
   mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
   animation: moon-tide 32s ease-in-out infinite alternate;
-}
-
-.site-header nav,
-.direction-option,
-.direction-hint,
-.hero-lede,
-.hero-aside .aside-note,
-.featured-copy,
-.note-item,
-.project-main,
-.about p,
-.site-footer {
-  font-family: var(--calligraphy);
-}
-
-html[data-zh-font="song"] {
-  --calligraphy: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
-}
-
-html[data-zh-font="xiaowei"] {
-  --calligraphy: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
-}
-
-html[data-zh-font="brush"] {
-  --calligraphy: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;
 }
 
 .edition,
@@ -90,13 +78,44 @@ h1 {
 
 .featured-heading h2,
 .section-heading h2,
-.about h2,
-.note-item h3,
-.project-main h3 {
-  font-family: var(--calligraphy);
+.about h2 {
+  font-family: var(--zh-display);
   font-style: normal;
   font-weight: 400;
-  letter-spacing: .015em;
+  letter-spacing: .01em;
+}
+
+.chinese-name {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-family: var(--zh-display);
+  font-size: clamp(36px, 4vw, 50px);
+  font-weight: 400;
+  letter-spacing: .025em;
+  line-height: 1.15;
+}
+
+.chinese-name-divider {
+  color: var(--accent);
+  font-family: var(--body);
+  font-size: .48em;
+  font-weight: 400;
+}
+
+.chinese-name small {
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+}
+
+.hero-aside > p:first-of-type {
+  font-family: var(--body);
+  font-style: normal;
 }
 
 .hero {
@@ -224,7 +243,7 @@ h1 {
 .note-kind,
 .direction-intro .eyebrow,
 .font-picker-label .eyebrow {
-  font-family: var(--calligraphy);
+  font-family: var(--body);
   font-style: normal;
 }
 
@@ -275,9 +294,10 @@ h1 {
 
 .font-option {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 7px 11px;
+  align-items: center;
+  gap: 13px;
+  min-width: 172px;
+  padding: 8px 13px;
   border: 1px solid var(--line);
   background: color-mix(in srgb, var(--panel) 58%, transparent);
   color: var(--muted);
@@ -298,25 +318,34 @@ h1 {
 }
 
 .font-option .font-sample {
-  font-size: 16px;
-  line-height: 1.3;
+  font-size: 25px;
+  line-height: 1.1;
 }
 
-.font-song .font-sample {
-  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+.font-luo .font-sample {
+  font-family: 'Luo', 'STKaiti', 'KaiTi', serif;
 }
 
-.font-xiaowei .font-sample {
-  font-family: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+.font-smiley .font-sample {
+  font-family: 'Smiley Sans Oblique', 'Microsoft YaHei', sans-serif;
 }
 
-.font-brush .font-sample {
-  font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;
+.font-option-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
 
-.font-option small {
+.font-option-label strong {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.font-option-label small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 9px;
   white-space: nowrap;
 }
 
@@ -347,17 +376,22 @@ h1 {
 
   .font-options {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .font-option {
     justify-content: center;
-    gap: 5px;
-    padding: 7px 4px;
+    gap: 7px;
+    min-width: 0;
+    padding: 8px 4px;
   }
 
   .font-option .font-sample {
-    font-size: 14px;
+    font-size: 20px;
+  }
+
+  .font-option-label small {
+    font-size: 8px;
   }
 
   .hero::before { top: 12%; right: -12%; width: 90vw; }
