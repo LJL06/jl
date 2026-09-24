@@ -1,4 +1,15 @@
 /* Moonstone: quiet silver tones, expressive Chinese display type, clear body text. */
+/* Selected pairing: Snow Silver palette with the Mist Grey digital-garden layout. */
+html[data-design="garden"] {
+  --paper: #f7f8fa;
+  --ink: #20252c;
+  --muted: #727985;
+  --accent: #5c73b2;
+  --line: #dfe3e8;
+  --panel: #ffffff;
+  --soft: #edf0f4;
+}
+
 :root {
   --display: 'Cormorant Garamond', 'Baskerville', 'Times New Roman', serif;
   --body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
