@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-design="duet">
+<html lang="zh-CN" data-design="duet" data-zh-font="xiaowei">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,7 +9,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23eceef0'/%3E%3Ctext x='14' y='45' font-family='Georgia' font-size='40' fill='%23282b30'%3Ejl%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="art-direction.css">
   <script src="script.js" defer></script>
@@ -42,6 +42,24 @@
         <button class="direction-option" type="button" data-design-option="garden" aria-pressed="false">
           <span class="swatches" aria-hidden="true"><i></i><i></i><i></i></span>
           <span><strong>雾灰</strong><small>数字花园</small></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="font-picker wrap" aria-label="比较中文字体">
+      <div class="font-picker-label">
+        <span class="eyebrow">中文字形</span>
+        <span>点选切换，即时预览</span>
+      </div>
+      <div class="font-options" role="group" aria-label="选择中文字体">
+        <button class="font-option font-song" type="button" data-font-option="song" aria-pressed="false">
+          <span class="font-sample">把想法写下来</span><small>宋韵</small>
+        </button>
+        <button class="font-option font-xiaowei" type="button" data-font-option="xiaowei" aria-pressed="true">
+          <span class="font-sample">把想法写下来</span><small>文楷</small>
+        </button>
+        <button class="font-option font-brush" type="button" data-font-option="brush" aria-pressed="false">
+          <span class="font-sample">把想法写下来</span><small>毛笔</small>
         </button>
       </div>
     </section>

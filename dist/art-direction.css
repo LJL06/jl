@@ -57,8 +57,19 @@ body::before {
   font-family: var(--calligraphy);
 }
 
+html[data-zh-font="song"] {
+  --calligraphy: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+}
+
+html[data-zh-font="xiaowei"] {
+  --calligraphy: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+}
+
+html[data-zh-font="brush"] {
+  --calligraphy: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;
+}
+
 .edition,
-.eyebrow,
 .hero-rule > span:first-child,
 .overline,
 .note-kind,
@@ -83,7 +94,7 @@ h1 {
 .note-item h3,
 .project-main h3 {
   font-family: var(--calligraphy);
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
   letter-spacing: .015em;
 }
@@ -206,6 +217,109 @@ h1 {
   font-size: 1em;
 }
 
+/* Keep Chinese upright; reserve italic styling for the English display type. */
+.hero-aside > p:first-of-type,
+.about h2 em,
+.overline,
+.note-kind,
+.direction-intro .eyebrow,
+.font-picker-label .eyebrow {
+  font-family: var(--calligraphy);
+  font-style: normal;
+}
+
+.eyebrow {
+  font-family: var(--display);
+  font-style: normal;
+}
+
+.overline,
+.note-kind {
+  letter-spacing: .04em;
+}
+
+.note-item:hover h3,
+.project-card:hover h3,
+.featured:hover h2 {
+  transform: translateX(3px);
+}
+
+.font-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 13px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.font-picker-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.font-picker-label .eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.font-options {
+  display: flex;
+  gap: 6px;
+}
+
+.font-option {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 58%, transparent);
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .25s ease, background-color .25s ease, color .25s ease;
+}
+
+.font-option:hover,
+.font-option[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.font-option:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.font-option .font-sample {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.font-song .font-sample {
+  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+}
+
+.font-xiaowei .font-sample {
+  font-family: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+}
+
+.font-brush .font-sample {
+  font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;
+}
+
+.font-option small {
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
 @keyframes moon-tide {
   from { transform: translate3d(-.5%, -.5%, 0) scale(1); }
   to { transform: translate3d(.5%, .7%, 0) scale(1.035); }
@@ -222,6 +336,30 @@ h1 {
 }
 
 @media (max-width: 580px) {
+  .font-picker {
+    display: block;
+  }
+
+  .font-picker-label {
+    justify-content: space-between;
+    margin-bottom: 9px;
+  }
+
+  .font-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .font-option {
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 4px;
+  }
+
+  .font-option .font-sample {
+    font-size: 14px;
+  }
+
   .hero::before { top: 12%; right: -12%; width: 90vw; }
   .duet .hero-aside { background: transparent; backdrop-filter: none; }
 }

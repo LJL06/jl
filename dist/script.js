@@ -37,6 +37,50 @@ options.forEach((option, index) => {
   });
 });
 
+const fontOptions = [...document.querySelectorAll('[data-font-option]')];
+const chineseFonts = ['song', 'xiaowei', 'brush'];
+
+function selectChineseFont(font) {
+  if (!chineseFonts.includes(font)) return;
+
+  root.dataset.zhFont = font;
+  fontOptions.forEach(option => {
+    option.setAttribute(
+      'aria-pressed',
+      String(option.dataset.fontOption === font),
+    );
+  });
+
+  try {
+    localStorage.setItem('personal-site-zh-font', font);
+  } catch {
+    // The selector still works if browser storage is unavailable.
+  }
+}
+
+let savedChineseFont = root.dataset.zhFont || 'xiaowei';
+try {
+  savedChineseFont = localStorage.getItem('personal-site-zh-font') || savedChineseFont;
+} catch {
+  // Fall back to the page default if browser storage is unavailable.
+}
+selectChineseFont(savedChineseFont);
+
+fontOptions.forEach((option, index) => {
+  option.addEventListener('click', () => {
+    selectChineseFont(option.dataset.fontOption);
+  });
+
+  option.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    const offset = event.key === 'ArrowRight' ? 1 : -1;
+    const nextIndex = (index + offset + fontOptions.length) % fontOptions.length;
+    fontOptions[nextIndex].focus();
+    selectChineseFont(fontOptions[nextIndex].dataset.fontOption);
+  });
+});
+
 const waveTargets = document.querySelectorAll(
   '.note-item, .project-card, .duet .featured',
 );
