@@ -1,24 +1,38 @@
 'use strict';
-const letters = document.querySelectorAll('.name-word > span');
-letters.forEach((letter, index) => letter.style.setProperty('--i', index));
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-if ('IntersectionObserver' in window && !reducedMotion.matches) {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  document.documentElement.classList.add('motion-ready');
-  document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+
+const root = document.documentElement;
+const body = document.body;
+const options = [...document.querySelectorAll('[data-design-option]')];
+const directions = ['essay', 'duet', 'garden'];
+
+function selectDirection(direction) {
+  if (!directions.includes(direction)) return;
+
+  root.dataset.design = direction;
+  body.classList.remove(...directions);
+  body.classList.add(direction);
+
+  options.forEach(option => {
+    option.setAttribute(
+      'aria-pressed',
+      String(option.dataset.designOption === direction),
+    );
+  });
 }
-document.querySelector('#replay').addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'instant' });
-  if (reducedMotion.matches) return;
-  letters.forEach(letter => { letter.style.animation = 'none'; });
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    letters.forEach(letter => { letter.style.animation = ''; });
-  }));
+
+selectDirection(root.dataset.design || 'essay');
+
+options.forEach((option, index) => {
+  option.addEventListener('click', () => {
+    selectDirection(option.dataset.designOption);
+  });
+
+  option.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    const offset = event.key === 'ArrowRight' ? 1 : -1;
+    const nextIndex = (index + offset + options.length) % options.length;
+    options[nextIndex].focus();
+    selectDirection(options[nextIndex].dataset.designOption);
+  });
 });
