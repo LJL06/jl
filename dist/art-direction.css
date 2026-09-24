@@ -254,6 +254,56 @@ h1 {
   font-size: 1em;
 }
 
+/* Keep the resume details as readable as the editorial framing. */
+.note-kind {
+  font-size: 12px;
+}
+
+.garden .note-item {
+  grid-template-columns: 40px 145px minmax(0, 1fr) 105px;
+}
+
+.garden .note-item h3 {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.garden .note-date {
+  grid-column: 4;
+  font-size: 12px;
+}
+
+.garden .project-card {
+  grid-template-columns: 58px minmax(0, 3fr) minmax(145px, .8fr);
+  align-items: start;
+  padding-block: 24px;
+}
+
+.garden .project-main h3 {
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.garden .project-main p {
+  margin-top: 9px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.garden .project-meta {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.content-note {
+  font-size: 12px;
+}
+
+.about p {
+  font-size: 15px;
+}
+
 /* Keep Chinese upright; reserve italic styling for the English display type. */
 .hero-aside > p:first-of-type,
 .about h2 em,
@@ -410,6 +460,27 @@ h1 {
 
   .font-option-label small {
     font-size: 8px;
+  }
+
+  .garden .note-item {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .garden .note-item h3 {
+    font-size: 14px;
+  }
+
+  .garden .project-card {
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding-block: 17px;
+  }
+
+  .garden .project-main h3 {
+    font-size: 17px;
+  }
+
+  .garden .project-main p {
+    font-size: 14px;
   }
 
   .hero::before { top: 12%; right: -12%; width: 90vw; }
