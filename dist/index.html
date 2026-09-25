@@ -16,6 +16,7 @@
   <link href="https://fontsapi.zeoseven.com/92/main/result.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="art-direction.css">
+  <script src="journal-data.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -201,61 +202,14 @@
     <section class="journal wrap" id="journal" aria-labelledby="journal-title">
       <div class="section-heading">
         <div><span class="eyebrow">JOURNAL / NOTES</span><h2 id="journal-title">手记与思考</h2></div>
-        <span class="section-aside">两页预览 · 点击圆点或页尾箭头切换</span>
+        <span class="section-aside">标题卡片 · 点击阅读手记</span>
       </div>
 
-      <div class="journal-reader" data-journal-page="1">
-        <nav class="journal-pager" aria-label="手记分页">
-          <button type="button" class="journal-page-dot is-active" data-journal-target="1" aria-current="page" aria-label="显示手记首页">
-            <span aria-hidden="true"></span><small>01</small>
-          </button>
-          <i class="journal-page-line" aria-hidden="true"></i>
-          <button type="button" class="journal-page-dot" data-journal-target="2" aria-label="显示文章正文">
-            <span aria-hidden="true"></span><small>02</small>
-          </button>
-        </nav>
-
-        <div class="journal-pages" aria-live="polite">
-          <article class="journal-page journal-page-index is-active" data-journal-page-panel="1" aria-labelledby="journal-index-title">
-            <header class="journal-page-header">
-              <span class="eyebrow">PAGE 01 / INDEX</span>
-              <p>研究、工程与学习留下的真实过程。</p>
-            </header>
-            <h3 id="journal-index-title">不只展示结果，也记录问题是怎样被理解的。</h3>
-            <div class="journal-index-list">
-              <div><span>RESEARCH</span><strong>研究札记</strong><p>论文阅读、计算参数、异常点与阶段判断。</p></div>
-              <div><span>ENGINEERING</span><strong>工程复盘</strong><p>嵌入式采集、服务器搭建和部署中的取舍。</p></div>
-              <div><span>LEARNING</span><strong>学习路径</strong><p>连接半导体物理、器件与实际研究问题。</p></div>
-            </div>
-            <button type="button" class="journal-turn journal-turn-next" data-journal-target="2">
-              <span>阅读第一篇手记</span><b aria-hidden="true">↳</b>
-            </button>
-          </article>
-
-          <article class="journal-page journal-page-article" data-journal-page-panel="2" aria-labelledby="journal-article-title" aria-hidden="true" inert>
-            <header class="journal-page-header">
-              <span class="eyebrow">PAGE 02 / STUDY NOTE 001</span>
-              <p>2026.09 · 学习记录</p>
-            </header>
-            <div class="journal-article-layout">
-              <div>
-                <h3 id="journal-article-title">为什么要把材料、器件与系统连在一起？</h3>
-                <p class="journal-article-lede">做材料输运计算时，我逐渐意识到，公式和曲线不是终点。真正有意思的问题是：电子在材料中的行为，最终怎样影响器件，又怎样进入一个可以运行的系统。</p>
-              </div>
-              <div class="journal-article-body">
-                <p>SPR-KKR 的计算让我从能带、散射与有限温度输运出发观察材料；半导体物理与微电子器件的学习，则提供了理解载流子、结与器件结构的另一套尺度。</p>
-                <p>嵌入式项目和树莓派服务器把视角继续向外推。它们要求我处理通信、接口、软件和部署，也让我看到理论知识如何落到工程约束里。</p>
-                <blockquote>我现在更关心的不是单独掌握多少工具，而是能否理解一条从物理机制到工程实现的完整链路。</blockquote>
-                <p>这条路径仍在形成中。手记会保留推导、失败和判断变化，而不只陈列最后的结果。</p>
-              </div>
-            </div>
-            <button type="button" class="journal-turn journal-turn-back" data-journal-target="1">
-              <b aria-hidden="true">↰</b><span>返回手记首页</span>
-            </button>
-          </article>
-        </div>
+      <div class="journal-reader" data-journal-page="0">
+        <nav class="journal-pager" aria-label="手记分页"></nav>
+        <div class="journal-pages" aria-live="polite"></div>
       </div>
-      <p class="journal-status">交互样例 · 后续接入本人编辑、访客只读的文章系统</p>
+      <p class="journal-status" id="journal-status">正在读取手记…</p>
     </section>
 
     <section class="about wrap" id="about" aria-labelledby="about-title">
