@@ -23,99 +23,244 @@
   <header class="site-header wrap">
     <a class="monogram" href="#home" aria-label="回到首页">jl<span>.</span></a>
     <nav aria-label="主要导航">
-      <a href="#resume">简历</a><a href="#projects">项目</a><a href="#about">关于</a>
+      <a href="#resume">简历</a><a href="#projects">项目</a><a href="#journal">手记</a><a href="#about">关于</a>
     </nav>
-    <span class="edition">PERSONAL SITE · JOURNAL & WORK</span>
+    <div class="header-tools">
+      <span class="edition">PERSONAL SITE · JOURNAL & WORK</span>
+      <button class="motion-toggle" type="button" aria-pressed="true">动效 · 开</button>
+    </div>
   </header>
 
   <main id="main">
+    <div class="technical-spine" aria-hidden="true">
+      <svg viewBox="0 0 1000 4000" preserveAspectRatio="none" role="presentation">
+        <path class="spine-center" d="M500 0V4000" />
+
+        <g class="spine-lattice">
+          <path class="tetrahedron-frame" d="M500 330L360 650L640 650ZM500 330L500 790M360 650L500 790L640 650" />
+          <path class="tetrahedron-bonds" d="M500 575L500 330M500 575L360 650M500 575L640 650M500 575L500 790" />
+          <g class="tetrahedron-vertices">
+            <circle cx="500" cy="330" r="9" /><circle cx="360" cy="650" r="9" />
+            <circle cx="640" cy="650" r="9" /><circle cx="500" cy="790" r="9" />
+          </g>
+          <circle class="tetrahedron-center" cx="500" cy="575" r="12" />
+        </g>
+
+        <g class="spine-wave">
+          <path class="spine-wave-path" d="M86 1710C176 1540 258 1880 350 1696S514 1518 606 1702S770 1886 916 1650" />
+          <path class="spine-wave-echo" d="M86 1835C180 2010 258 1662 354 1844S520 2022 614 1834S782 1650 916 1880" />
+          <circle cx="500" cy="1699" r="11" />
+          <circle cx="500" cy="1840" r="6" />
+        </g>
+
+        <g class="spine-circuit">
+          <path class="cmos-wire" d="M450 2760H550M500 2760V2850M500 2970V3110M500 3230V3310M450 3310H550M466 3330H534M478 3350H522M500 3040H660M340 2920H455M340 2920V3170H470" />
+          <path class="cmos-device" d="M500 2850V2970M470 2860V2960M500 3110V3230M470 3120V3220" />
+          <circle class="cmos-gate-bubble" cx="462" cy="2920" r="7" />
+          <circle class="cmos-node" cx="500" cy="2760" r="6" />
+          <circle class="cmos-node" cx="500" cy="3040" r="8" />
+          <circle class="cmos-node" cx="340" cy="2920" r="6" />
+        </g>
+      </svg>
+    </div>
+
     <section class="hero wrap" id="home" aria-labelledby="name">
-      <div class="hero-label"><span class="eyebrow">SNOW SILVER · MIST GREY</span><span>嵌入式系统 · 无线感知 · 边缘智能</span></div>
+      <div class="hero-label"><span class="eyebrow">SNOW SILVER · PERSONAL JOURNAL</span><span>HUBEI · CHINA / 2026</span></div>
       <div class="hero-grid">
         <div class="hero-main">
           <p class="chinese-name"><span class="chinese-name-cn">李佳乐</span><span class="chinese-name-divider" aria-hidden="true">／</span><small>JIALE LI</small></p>
           <h1 id="name">A life<br><em>in progress.</em></h1>
-          <p class="hero-lede">从通信与感知出发，<br>把想法放进真实设备和实验里验证。</p>
+          <p class="hero-lede">从材料输运与器件物理出发，<br>走向真实运行的电子系统。</p>
         </div>
-        <aside class="hero-aside">
-          <span class="aside-index">EDUCATION</span>
-          <p>湖北师范大学</p>
-          <p class="aside-note">集成电路设计（电子信息方向）<br>本科在读 · 关注嵌入式与无线感知</p>
-          <a class="text-link" href="#projects">查看项目 <span aria-hidden="true">↘</span></a>
+        <aside class="hero-instrument" aria-label="当前探索方向">
+          <div class="instrument-meta"><span>ONGOING STUDY</span><span>2026 / WIP</span></div>
+          <div class="signal-canvas" aria-hidden="true">
+            <span class="signal-watermark">WIP</span>
+            <svg viewBox="0 0 420 300" role="presentation">
+              <g class="signal-grid">
+                <path d="M24 52H396M24 150H396M24 248H396" />
+                <path d="M84 24V276M210 24V276M336 24V276" />
+              </g>
+              <g class="signal-layer signal-layer-a">
+                <path id="signal-route" class="signal-trace trace-a" d="M24 218C69 214 91 86 139 89S195 240 248 198 305 62 396 77" />
+                <circle cx="139" cy="89" r="4" />
+                <circle cx="248" cy="198" r="4" />
+                <circle class="signal-runner" r="4.5">
+                  <animateMotion dur="13s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;.7;1"><mpath href="#signal-route" /></animateMotion>
+                  <animate attributeName="opacity" dur="13s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.04;.66;.7;1" />
+                </circle>
+              </g>
+              <g class="signal-layer signal-layer-b">
+                <path class="signal-trace trace-b" d="M24 112C75 105 107 184 154 177S221 70 271 103 327 224 396 212" />
+                <circle cx="271" cy="103" r="3" />
+              </g>
+              <g class="signal-axis">
+                <path d="M24 276H396M24 276V24" />
+                <path d="M390 270L396 276 390 282M18 30L24 24 30 30" />
+              </g>
+            </svg>
+          </div>
+          <p class="instrument-copy">MATERIALS · DEVICES · SYSTEMS</p>
         </aside>
       </div>
-      <div class="hero-rule"><span>ENGINEERING · RESEARCH · NOTES</span><span>经历持续更新</span></div>
+      <div class="hero-rule hero-index" aria-label="内容索引">
+        <a href="#projects"><small>01 / RESEARCH</small><strong>材料输运与器件物理</strong></a>
+        <a href="#projects"><small>02 / SYSTEMS</small><strong>嵌入式与电子系统</strong></a>
+        <a href="#journal"><small>03 / WRITING</small><strong>工程记录与个人思考</strong></a>
+      </div>
     </section>
 
     <section class="featured wrap" id="resume" aria-labelledby="featured-title">
-      <div class="section-label"><span class="eyebrow">PROFILE / 简历摘要</span><span class="serial">01</span></div>
-      <div class="featured-grid">
-        <div class="featured-heading">
-          <p class="overline">个人方向</p>
-          <h2 id="featured-title">让通信、感知与设备端验证连起来。</h2>
-        </div>
-        <div class="featured-copy">
-          <p>本科阶段围绕嵌入式开发、Wi-Fi CSI 无线感知与端侧智能开展实践；用实验和可复现的数据持续校验方案。</p>
-          <a class="read-link" href="#skills">查看专业技能 <span aria-hidden="true">↘</span></a>
-        </div>
-        <span class="draft-stamp">当前重点<br>Wi-Fi CSI · CrSb</span>
+      <div class="section-label">
+        <span class="eyebrow">PROFILE / LEARNING TRAJECTORY</span>
+        <span class="serial">2026 — WIP</span>
+      </div>
+
+      <div class="featured-heading">
+        <h2 id="featured-title">从材料中的电子输运，走向芯片里的器件与系统。</h2>
+      </div>
+
+      <div class="profile-path" aria-label="当前学习与研究路径">
+        <article class="profile-stage">
+          <span>01 / MATTER</span>
+          <strong>材料输运</strong>
+          <small>SPR-KKR · 有限温度计算</small>
+        </article>
+        <article class="profile-stage">
+          <span>02 / DEVICE</span>
+          <strong>器件物理</strong>
+          <small>半导体物理 · 微电子器件</small>
+        </article>
+        <article class="profile-stage">
+          <span>03 / SYSTEM</span>
+          <strong>集成电路工程</strong>
+          <small>器件 · 电路 · 系统实现</small>
+        </article>
+      </div>
+
+      <div class="featured-copy">
+        <p>以集成电路工程为升学方向，在反铁磁材料输运科研、器件物理学习与嵌入式系统实践之间，逐步建立从理论计算到工程实现的完整认识。</p>
+        <a class="read-link" href="#skills">查看能力谱系 <span aria-hidden="true">↘</span></a>
       </div>
     </section>
 
-    <section class="notes wrap" id="skills" aria-labelledby="skills-title">
+    <section class="notes capability-map wrap" id="skills" aria-labelledby="skills-title">
       <div class="section-heading">
-        <div><span class="eyebrow">TOOLS & PRACTICE</span><h2 id="skills-title">专业技能</h2></div>
-        <span class="section-aside">随项目实践持续积累</span>
+        <div><span class="eyebrow">CAPABILITY MAP</span><h2 id="skills-title">能力谱系</h2></div>
+        <span class="section-aside">能力与下方项目逐项对应</span>
       </div>
       <div class="note-list">
-        <article class="note-item"><span class="note-number">01</span><div><span class="note-kind">嵌入式与硬件</span><h3>C/C++ · ESP32-S3 / ESP-IDF · STM32 · FreeRTOS；I²C、SPI、UART、单总线。</h3></div><span class="note-date">开发实践</span></article>
-        <article class="note-item"><span class="note-number">02</span><div><span class="note-kind">无线感知与数据</span><h3>Wi-Fi CSI 采集与 UDP 链路、LoRa 通信；Python 数据记录和离线分析。</h3></div><span class="note-date">采集 · 分析</span></article>
-        <article class="note-item"><span class="note-number">03</span><div><span class="note-kind">边缘智能</span><h3>TFLite Micro、轻量 AutoEncoder 与 MQTT 数据 / 告警链路。</h3></div><span class="note-date">端侧验证</span></article>
-        <article class="note-item"><span class="note-number">04</span><div><span class="note-kind">建模与系统</span><h3>MATLAB / Simulink、Linux、Git；FastAPI、React、SQLite、Nginx。</h3></div><span class="note-date">建模 · 部署</span></article>
+        <article class="note-item"><span class="note-number">A</span><div><span class="note-kind">材料与输运计算</span><h3>SPR-KKR 8.6 / KKRCHI · SCF / SIGMA · CPA · 有限温度声子与自旋无序。</h3></div><span class="note-date">FeRh · Cr · CrSb</span></article>
+        <article class="note-item"><span class="note-number">B</span><div><span class="note-kind">数据分析与表达</span><h3>Python · pandas · NumPy · Matplotlib · Origin · VESTA，从计算结果到趋势判断与图形表达。</h3></div><span class="note-date">科研数据链路</span></article>
+        <article class="note-item"><span class="note-number">C</span><div><span class="note-kind">嵌入式与通信</span><h3>C/C++ · STM32 · ESP32-S3 / ESP-IDF · Wi-Fi CSI · LoRa · I²C / SPI / UART。</h3></div><span class="note-date">飞控 · CSI</span></article>
+        <article class="note-item"><span class="note-number">D</span><div><span class="note-kind">建模与系统实现</span><h3>MATLAB / Simulink · Linux · Git · FastAPI · React · SQLite · Nginx。</h3></div><span class="note-date">仿真 · NAS</span></article>
       </div>
     </section>
 
     <section class="projects wrap" id="projects" aria-labelledby="projects-title">
       <div class="section-heading">
-        <div><span class="eyebrow">PROJECTS & RESEARCH</span><h2 id="projects-title">项目与研究</h2></div>
-        <span class="section-aside">已完成与进行中的实践</span>
+        <div><span class="eyebrow">SELECTED WORK</span><h2 id="projects-title">研究主线与工程实践</h2></div>
+        <span class="section-aside">主线优先，保留完整工程能力</span>
       </div>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">01</span>
-        <div class="project-main"><span class="note-kind">毕业设计 · 进行中</span><h3>Wi-Fi CSI 室内状态感知系统</h3><p>基于 ESP32-S3 / ESP-IDF 建立真实 CSI 回调、UDP 回传及 PC 端记录、回放与离线波形检查。120 Hz 触发下连续采集 10 分钟，共记录 57,644 帧，实测 CSI 约 96.1 Hz，文件完整性核验通过；三分类仍在验证，尚未确认。</p></div>
-        <span class="project-meta">集创赛<br>华中赛区三等奖</span>
-      </article>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">02</span>
-        <div class="project-main"><span class="note-kind">科研项目 · 进行中</span><h3>CrSb 材料计算与数据分析</h3><p>围绕 CrSb 开展材料计算与数据分析，预计年末形成学术论文成果；计算方法、本人分工与研究结论待核对原始记录后补充。</p></div>
-        <span class="project-meta">预计年末<br>形成论文成果</span>
-      </article>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">03</span>
-        <div class="project-main"><span class="note-kind">校内项目 · 进行中</span><h3>STM32 无线通信与无人机飞控实验</h3><p>已完成 STM32 板卡无线通信的 Simulink 建模与仿真；在教师指导下参与无人机飞控实验，结合姿态控制模型持续测试和学习。</p></div>
-        <span class="project-meta">无线通信仿真<br>已完成</span>
-      </article>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">04</span>
-        <div class="project-main"><span class="note-kind">个人项目 · 已完成</span><h3>ESP32-S3 环境动态异常检测</h3><p>完成 DHT22 / BH1750 环境采集、动态特征与轻量 AutoEncoder，并部署至 TFLite Micro；通过真实环境数据验证 MQTT 告警链路。</p></div>
-        <span class="project-meta">2026.05 — 07<br>实机验证</span>
-      </article>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">05</span>
-        <div class="project-main"><span class="note-kind">个人工程 · V1 完成</span><h3>Raspberry Pi 4B 简易 NAS 系统</h3><p>基于 FastAPI、React、SQLite 与 Nginx 搭建工作台，包含系统监控、登录鉴权、文件管理和 Project Hub；文件上传、下载、重命名与删除闭环已完成。</p></div>
-        <span class="project-meta">私有文件空间<br>独立于个人主页</span>
-      </article>
-      <article class="project-card">
-        <span class="project-mark" aria-hidden="true">06</span>
-        <div class="project-main"><span class="note-kind">个人项目 · 原型</span><h3>个人主页与博客</h3><p>以雪银 / 雾灰为视觉方向，整理个人介绍、项目展示与手记版面；目前持续更新内容，后续计划作为独立站点部署在 Raspberry Pi。</p></div>
-        <span class="project-meta">内容持续整理<br>个人表达与记录</span>
-      </article>
+      <div class="research-block">
+        <div class="research-intro">
+          <span class="project-mark" aria-hidden="true">R / 01</span>
+          <span class="note-kind">CURRENT RESEARCH</span>
+          <h3>反铁磁材料的有限温度输运</h3>
+          <p>围绕材料计算、温度无序与自旋霍尔响应形成连续研究线索。页面只呈现已经核实的工作，未确认的方法与结果保留空白。</p>
+          <span class="research-toolchain">SPR-KKR · Python · Origin · VESTA</span>
+        </div>
+        <div class="research-cases">
+          <article class="research-case project-main"><span class="case-index">01</span><h3>FeRh</h3><p>完成 SCF / SIGMA 计算与异常排查，重新设置反平行磁矩并分析电荷、输运张量。</p><span>计算与排障</span></article>
+          <article class="research-case project-main"><span class="case-index">02</span><h3>Cr</h3><p>由文献磁性数据构造有限温度输入，分析 Néel 温区附近的非单调自旋霍尔响应。</p><span>数据处理与比较</span></article>
+          <article class="research-case project-main"><span class="case-index">03</span><h3>CrSb</h3><p>材料计算与数据分析进行中；方法、分工和阶段结论将在工程记录核实后补充。</p><span>进行中 · 待完善</span></article>
+        </div>
+      </div>
+
+      <div class="engineering-heading"><span class="eyebrow">ENGINEERING PRACTICE</span><span>从建模、采集到部署</span></div>
+      <div class="engineering-grid">
+        <article class="project-card">
+          <span class="project-mark" aria-hidden="true">E / 01</span>
+          <div class="project-main"><span class="note-kind">校内实验 · 进行中</span><h3>STM32 无线通信与无人机飞控</h3><p>已完成 STM32 板卡无线通信的 MATLAB / Simulink 建模与仿真；在教师指导下参与无人机飞控实验，目前处于学习与测试阶段。</p></div>
+          <span class="project-meta">Simulink<br>STM32 · LoRa</span>
+        </article>
+        <article class="project-card">
+          <span class="project-mark" aria-hidden="true">E / 02</span>
+          <div class="project-main"><span class="note-kind">毕业设计 · 进行中</span><h3>Wi-Fi CSI 室内状态感知</h3><p>建立 CSI 采集、UDP 回传、记录 / 回放和离线审计链路。10 分钟记录 57,644 帧；当前 pilot 结论仍为 inconclusive。</p></div>
+          <span class="project-meta">ESP32-S3<br>集创赛华中三等奖</span>
+        </article>
+        <article class="project-card">
+          <span class="project-mark" aria-hidden="true">E / 03</span>
+          <div class="project-main"><span class="note-kind">个人工程 · V1</span><h3>Raspberry Pi 4B 简易 NAS</h3><p>使用 FastAPI、React、SQLite 与 Nginx 完成系统监控、鉴权、文件管理和 Project Hub，形成可运行的个人服务器工作台。</p></div>
+          <span class="project-meta">Linux · Web<br>端到端部署</span>
+        </article>
+      </div>
       <p class="content-note">研究与实验状态如实标注；尚未验证的结果不会写成既成成果。</p>
+    </section>
+
+    <section class="journal wrap" id="journal" aria-labelledby="journal-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">JOURNAL / NOTES</span><h2 id="journal-title">手记与思考</h2></div>
+        <span class="section-aside">两页预览 · 点击圆点或页尾箭头切换</span>
+      </div>
+
+      <div class="journal-reader" data-journal-page="1">
+        <nav class="journal-pager" aria-label="手记分页">
+          <button type="button" class="journal-page-dot is-active" data-journal-target="1" aria-current="page" aria-label="显示手记首页">
+            <span aria-hidden="true"></span><small>01</small>
+          </button>
+          <i class="journal-page-line" aria-hidden="true"></i>
+          <button type="button" class="journal-page-dot" data-journal-target="2" aria-label="显示文章正文">
+            <span aria-hidden="true"></span><small>02</small>
+          </button>
+        </nav>
+
+        <div class="journal-pages" aria-live="polite">
+          <article class="journal-page journal-page-index is-active" data-journal-page-panel="1" aria-labelledby="journal-index-title">
+            <header class="journal-page-header">
+              <span class="eyebrow">PAGE 01 / INDEX</span>
+              <p>研究、工程与学习留下的真实过程。</p>
+            </header>
+            <h3 id="journal-index-title">不只展示结果，也记录问题是怎样被理解的。</h3>
+            <div class="journal-index-list">
+              <div><span>RESEARCH</span><strong>研究札记</strong><p>论文阅读、计算参数、异常点与阶段判断。</p></div>
+              <div><span>ENGINEERING</span><strong>工程复盘</strong><p>嵌入式采集、服务器搭建和部署中的取舍。</p></div>
+              <div><span>LEARNING</span><strong>学习路径</strong><p>连接半导体物理、器件与实际研究问题。</p></div>
+            </div>
+            <button type="button" class="journal-turn journal-turn-next" data-journal-target="2">
+              <span>阅读第一篇手记</span><b aria-hidden="true">↳</b>
+            </button>
+          </article>
+
+          <article class="journal-page journal-page-article" data-journal-page-panel="2" aria-labelledby="journal-article-title" aria-hidden="true" inert>
+            <header class="journal-page-header">
+              <span class="eyebrow">PAGE 02 / STUDY NOTE 001</span>
+              <p>2026.09 · 学习记录</p>
+            </header>
+            <div class="journal-article-layout">
+              <div>
+                <h3 id="journal-article-title">为什么要把材料、器件与系统连在一起？</h3>
+                <p class="journal-article-lede">做材料输运计算时，我逐渐意识到，公式和曲线不是终点。真正有意思的问题是：电子在材料中的行为，最终怎样影响器件，又怎样进入一个可以运行的系统。</p>
+              </div>
+              <div class="journal-article-body">
+                <p>SPR-KKR 的计算让我从能带、散射与有限温度输运出发观察材料；半导体物理与微电子器件的学习，则提供了理解载流子、结与器件结构的另一套尺度。</p>
+                <p>嵌入式项目和树莓派服务器把视角继续向外推。它们要求我处理通信、接口、软件和部署，也让我看到理论知识如何落到工程约束里。</p>
+                <blockquote>我现在更关心的不是单独掌握多少工具，而是能否理解一条从物理机制到工程实现的完整链路。</blockquote>
+                <p>这条路径仍在形成中。手记会保留推导、失败和判断变化，而不只陈列最后的结果。</p>
+              </div>
+            </div>
+            <button type="button" class="journal-turn journal-turn-back" data-journal-target="1">
+              <b aria-hidden="true">↰</b><span>返回手记首页</span>
+            </button>
+          </article>
+        </div>
+      </div>
+      <p class="journal-status">交互样例 · 后续接入本人编辑、访客只读的文章系统</p>
     </section>
 
     <section class="about wrap" id="about" aria-labelledby="about-title">
       <span class="eyebrow">EDUCATION & AWARDS</span>
-      <div><h2 id="about-title">教育与荣誉</h2><p>湖北师范大学 · 集成电路设计（电子信息方向）· 本科在读。</p><p>集创赛华中赛区三等奖（Wi-Fi CSI 相关项目）；蓝桥杯单片机组省级二等奖；校二等奖学金；CET-4；普通话二级乙等。</p></div>
+      <div><h2 id="about-title">教育、方向与荣誉</h2><p>湖北师范大学 · 集成电路设计（电子信息方向）· 本科在读。</p><p>当前升学意向：电子科技大学 031 集成电路科学与工程学院，优先考虑 085403 集成电路工程（专硕）01 微电子器件与集成电路方向；考试科目按政治、英语一、数学一、832 微电子器件准备，以报考年度招生目录为准。</p><p>集创赛华中赛区三等奖（Wi-Fi CSI 相关项目）；蓝桥杯单片机组省级二等奖；校二等奖学金；CET-4。</p></div>
       <a class="about-mark" href="https://github.com/LJL06" target="_blank" rel="noreferrer">GitHub ↗</a>
     </section>
   </main>

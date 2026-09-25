@@ -2,9 +2,60 @@
 
 const root = document.documentElement;
 const body = document.body;
+root.classList.add('js');
+root.dataset.motion = 'full';
 root.dataset.design = 'garden';
 body.classList.add('garden');
 root.dataset.titleFont = 'wenkai';
+
+const motionToggle = document.querySelector('.motion-toggle');
+const motionEnabled = () => root.dataset.motion === 'full';
+const heroInstrument = document.querySelector('.hero-instrument');
+
+motionToggle?.addEventListener('click', () => {
+  const enabled = !motionEnabled();
+  root.dataset.motion = enabled ? 'full' : 'off';
+  motionToggle.setAttribute('aria-pressed', String(enabled));
+  motionToggle.textContent = enabled ? '动效 · 开' : '动效 · 关';
+
+  if (!enabled) {
+    heroInstrument?.style.removeProperty('--signal-x');
+    heroInstrument?.style.removeProperty('--signal-y');
+    document.querySelectorAll('.scroll-reveal').forEach(target => target.classList.add('is-visible'));
+    document.querySelectorAll('.paper-wave').forEach(target => {
+      target.classList.remove('paper-active', 'wave-active');
+      target.style.removeProperty('--paper-shine-x');
+      target.style.removeProperty('--paper-shine-y');
+    });
+  }
+});
+
+if (heroInstrument) {
+  let heroFrame = 0;
+  let heroPointer = null;
+
+  heroInstrument.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
+    heroPointer = { x: event.clientX, y: event.clientY };
+    if (heroFrame) return;
+
+    heroFrame = requestAnimationFrame(() => {
+      heroFrame = 0;
+      if (!heroPointer) return;
+      const bounds = heroInstrument.getBoundingClientRect();
+      const x = ((heroPointer.x - bounds.left) / bounds.width - .5) * 12;
+      const y = ((heroPointer.y - bounds.top) / bounds.height - .5) * 10;
+      heroInstrument.style.setProperty('--signal-x', `${x.toFixed(2)}px`);
+      heroInstrument.style.setProperty('--signal-y', `${y.toFixed(2)}px`);
+    });
+  });
+
+  heroInstrument.addEventListener('pointerleave', () => {
+    heroPointer = null;
+    heroInstrument.style.setProperty('--signal-x', '0px');
+    heroInstrument.style.setProperty('--signal-y', '0px');
+  });
+}
 
 const textWaveTargets = [...document.querySelectorAll(
   '.featured-heading h2, .note-item h3, .project-main h3',
@@ -41,7 +92,7 @@ function cacheTextWaveLayout(target) {
 textWaveTargets.forEach(target => {
   cacheTextWaveLayout(target);
   target.addEventListener('pointerenter', () => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!motionEnabled()) return;
     cacheTextWaveLayout(target);
     target.classList.add('glyph-wave-active');
   });
@@ -49,7 +100,7 @@ textWaveTargets.forEach(target => {
   let frame = 0;
   let pointer = null;
   target.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
     pointer = { x: event.clientX, y: event.clientY };
     if (frame) return;
     frame = requestAnimationFrame(() => {
@@ -77,7 +128,7 @@ window.addEventListener('resize', refreshTextWaveLayout, { passive: true });
 if (document.fonts?.ready) document.fonts.ready.then(refreshTextWaveLayout);
 
 const waveTargets = document.querySelectorAll(
-  '.note-item, .project-card, .duet .featured',
+  '.note-item, .project-card, .research-case, .journal-grid article, .duet .featured',
 );
 
 waveTargets.forEach(target => {
@@ -85,12 +136,12 @@ waveTargets.forEach(target => {
   let pointer = null;
 
   target.addEventListener('pointerenter', event => {
-    if (event.pointerType === 'touch') return;
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
     target.classList.add('wave-active');
   });
 
   target.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch') return;
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
     pointer = { x: event.clientX, y: event.clientY };
     if (frame) return;
     frame = requestAnimationFrame(() => {
@@ -109,3 +160,103 @@ waveTargets.forEach(target => {
     target.classList.remove('wave-active');
   });
 });
+
+const paperTargets = document.querySelectorAll(
+  '.note-item, .research-case, .engineering-grid .project-card, .journal-grid article',
+);
+
+paperTargets.forEach(target => {
+  target.classList.add('paper-wave');
+  let frame = 0;
+  let pointer = null;
+
+  target.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
+    target.classList.add('paper-active');
+  });
+
+  target.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch' || !motionEnabled()) return;
+    pointer = { x: event.clientX, y: event.clientY };
+    if (frame) return;
+
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      if (!pointer) return;
+      const bounds = target.getBoundingClientRect();
+      const x = (pointer.x - bounds.left) / bounds.width;
+      const y = (pointer.y - bounds.top) / bounds.height;
+
+      target.style.setProperty('--paper-shine-x', `${(x * 100).toFixed(2)}%`);
+      target.style.setProperty('--paper-shine-y', `${(y * 100).toFixed(2)}%`);
+    });
+  });
+
+  target.addEventListener('pointerleave', () => {
+    pointer = null;
+    target.classList.remove('paper-active');
+  });
+});
+
+const journalReader = document.querySelector('.journal-reader');
+
+if (journalReader) {
+  const journalControls = [...journalReader.querySelectorAll('[data-journal-target]')];
+  const journalDots = [...journalReader.querySelectorAll('.journal-page-dot')];
+  const journalPages = [...journalReader.querySelectorAll('[data-journal-page-panel]')];
+
+  const showJournalPage = pageNumber => {
+    journalReader.dataset.journalPage = pageNumber;
+
+    journalDots.forEach(dot => {
+      const active = dot.dataset.journalTarget === pageNumber;
+      dot.classList.toggle('is-active', active);
+      if (active) dot.setAttribute('aria-current', 'page');
+      else dot.removeAttribute('aria-current');
+    });
+
+    journalPages.forEach(page => {
+      const active = page.dataset.journalPagePanel === pageNumber;
+      page.classList.toggle('is-active', active);
+      page.setAttribute('aria-hidden', String(!active));
+      page.inert = !active;
+    });
+  };
+
+  journalControls.forEach(control => {
+    control.addEventListener('click', () => {
+      showJournalPage(control.dataset.journalTarget);
+    });
+  });
+}
+
+const revealTargets = [...document.querySelectorAll(
+  '.featured, .section-heading, .note-item, .research-intro, .research-case, .engineering-heading, .project-card, .journal-grid article, .about',
+)];
+
+revealTargets.forEach((target, index) => {
+  target.classList.add('scroll-reveal');
+  target.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 40}ms`);
+});
+
+if (!motionEnabled() || !('IntersectionObserver' in window)) {
+  revealTargets.forEach(target => target.classList.add('is-visible'));
+} else {
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.12) {
+        entry.target.classList.add('is-visible');
+        return;
+      }
+
+      if (!entry.isIntersecting) {
+        entry.target.classList.remove('is-visible');
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -8% 0px',
+    threshold: [0, 0.12],
+  });
+
+  revealTargets.forEach(target => revealObserver.observe(target));
+}
