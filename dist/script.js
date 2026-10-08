@@ -6,7 +6,7 @@ root.classList.add('js');
 root.dataset.motion = 'full';
 root.dataset.design = 'garden';
 body.classList.add('garden');
-root.dataset.titleFont = 'wenkai';
+root.dataset.titleFont = 'xiaxing';
 
 const motionToggle = document.querySelector('.motion-toggle');
 const motionEnabled = () => root.dataset.motion === 'full';

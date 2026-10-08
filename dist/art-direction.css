@@ -14,6 +14,7 @@ html[data-design="garden"] {
   --display: 'Cormorant Garamond', 'Baskerville', 'Times New Roman', serif;
   --body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --zh-display: 'LXGW WenKai GB', 'STKaiti', 'KaiTi', serif;
+  --zh-calligraphy: 'JL Xia Xing Web', 'LXGW WenKai GB', 'STXingkai', 'STKaiti', 'KaiTi', serif;
   font-family: var(--body);
   font-synthesis: none;
 }
@@ -2336,4 +2337,17 @@ html[data-motion="off"] .journal-index-card b {
 html[data-motion="off"] .journal-index-card:hover,
 html[data-motion="off"] .journal-index-card:focus-visible {
   transform: none;
+}
+
+/* Calligraphy is reserved for display titles; body text and quotations stay readable. */
+html[data-title-font="xiaxing"] .chinese-name-cn,
+html[data-title-font="xiaxing"] .featured-heading h2,
+html[data-title-font="xiaxing"] .section-heading h2,
+html[data-title-font="xiaxing"] .about h2,
+html[data-title-font="xiaxing"] .journal-page-index > h3,
+html[data-title-font="xiaxing"] .journal-page-article h3,
+html[data-title-font="xiaxing"] .journal-index-card strong {
+  font-family: var(--zh-calligraphy);
+  font-style: normal;
+  font-weight: 400;
 }
