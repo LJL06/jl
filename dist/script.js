@@ -2,21 +2,250 @@
 
 const root = document.documentElement;
 const body = document.body;
+const designChoices = ['essay', 'duet', 'garden'];
+const readPreference = key => {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+const writePreference = (key, value) => {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Theme controls remain usable when storage is unavailable.
+  }
+};
+const initialDesign = designChoices.includes(readPreference('jl-site-design'))
+  ? readPreference('jl-site-design')
+  : 'garden';
+const initialTheme = readPreference('jl-site-theme') === 'night' ? 'night' : 'day';
 root.classList.add('js');
 root.dataset.motion = 'full';
-root.dataset.design = 'garden';
-body.classList.add('garden');
-root.dataset.titleFont = 'xiaxing';
+root.dataset.design = initialDesign;
+root.dataset.palette = 'blueprint';
+root.dataset.theme = initialTheme;
+body.classList.add(initialDesign);
+root.dataset.titleFont = 'wenkai';
 
 const motionToggle = document.querySelector('.motion-toggle');
+const themeToggle = document.querySelector('.theme-toggle');
 const motionEnabled = () => root.dataset.motion === 'full';
 const heroInstrument = document.querySelector('.hero-instrument');
+
+const syncAppearanceControls = () => {
+  const isNight = root.dataset.theme === 'night';
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', String(isNight));
+    themeToggle.setAttribute('aria-label', `切换到${isNight ? '日间' : '夜间'}模式`);
+  }
+  if (motionToggle) {
+    const enabled = motionEnabled();
+    motionToggle.setAttribute('aria-pressed', String(enabled));
+    motionToggle.setAttribute('aria-label', `${enabled ? '关闭' : '开启'}页面动效`);
+  }
+};
+
+themeToggle?.addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'night' ? 'day' : 'night';
+  writePreference('jl-site-theme', root.dataset.theme);
+  syncAppearanceControls();
+});
+
+syncAppearanceControls();
+
+const escapeContentHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+})[character]);
+
+const renderContentInlineMarkdown = value => escapeContentHtml(value)
+  .replace(/`([^`]+)`/g, '<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  .replace(/~~([^~]+)~~/g, '<del>$1</del>')
+  .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+  .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+
+const renderContentMarkdown = markdown => {
+  const lines = String(markdown ?? '').replace(/\r\n?/g, '\n').split('\n');
+  const blocks = [];
+  let index = 0;
+
+  while (index < lines.length) {
+    const line = lines[index];
+    if (!line.trim()) {
+      index += 1;
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const level = heading[1].length;
+      blocks.push(`<h${level}>${renderContentInlineMarkdown(heading[2])}</h${level}>`);
+      index += 1;
+      continue;
+    }
+
+    if (/^\s*>/.test(line)) {
+      const quoteLines = [];
+      while (index < lines.length && /^\s*>/.test(lines[index])) {
+        quoteLines.push(lines[index].replace(/^\s*>\s?/, ''));
+        index += 1;
+      }
+      blocks.push(`<blockquote><p>${quoteLines.map(renderContentInlineMarkdown).join('<br>')}</p></blockquote>`);
+      continue;
+    }
+
+    const listMatch = line.match(/^\s*(-|\*|\+|\d+\.)\s+(.+)$/);
+    if (listMatch) {
+      const ordered = /^\d+\./.test(listMatch[1]);
+      const tag = ordered ? 'ol' : 'ul';
+      const items = [];
+      while (index < lines.length) {
+        const itemMatch = lines[index].match(/^\s*(-|\*|\+|\d+\.)\s+(.+)$/);
+        if (!itemMatch) break;
+        items.push(`<li>${renderContentInlineMarkdown(itemMatch[2])}</li>`);
+        index += 1;
+      }
+      blocks.push(`<${tag}>${items.join('')}</${tag}>`);
+      continue;
+    }
+
+    const paragraph = [];
+    while (index < lines.length && lines[index].trim()
+      && !/^(#{1,6})\s+/.test(lines[index])
+      && !/^\s*>/.test(lines[index])
+      && !/^\s*(-|\*|\+|\d+\.)\s+/.test(lines[index])) {
+      paragraph.push(lines[index]);
+      index += 1;
+    }
+    blocks.push(`<p>${paragraph.map(renderContentInlineMarkdown).join('<br>')}</p>`);
+  }
+
+  return blocks.join('');
+};
+
+const applyPublishedSiteContent = () => {
+  const content = window.PUBLIC_JOURNAL_DATA?.site_content;
+  if (!content || typeof content !== 'object') return;
+
+  const profile = content.profile && typeof content.profile === 'object' ? content.profile : {};
+  const setText = (selector, value) => {
+    const element = document.querySelector(selector);
+    if (element && typeof value === 'string') element.textContent = value;
+  };
+  setText('.chinese-name-cn', profile.name_cn);
+  setText('.chinese-name small', profile.name_en);
+  setText('.hero-label span:last-child', profile.location);
+
+  const headline = document.querySelector('.hero-main h1');
+  if (headline && typeof profile.headline_main === 'string' && typeof profile.headline_accent === 'string') {
+    headline.innerHTML = `${escapeContentHtml(profile.headline_main)}<br><em>${escapeContentHtml(profile.headline_accent)}</em>`;
+  }
+  const lede = document.querySelector('.hero-lede');
+  if (lede && typeof profile.lede_markdown === 'string') {
+    lede.replaceChildren(...profile.lede_markdown.split(/\r?\n/).flatMap((line, lineIndex) => {
+      const nodes = [];
+      if (lineIndex) nodes.push(document.createElement('br'));
+      const text = document.createElement('span');
+      text.innerHTML = renderContentInlineMarkdown(line);
+      nodes.push(text);
+      return nodes;
+    }));
+  }
+
+  const roots = {
+    resume: document.querySelector('#resume'),
+    skills: document.querySelector('#skills'),
+    projects: document.querySelector('#projects'),
+    journal: document.querySelector('#journal'),
+    about: document.querySelector('#about'),
+  };
+  const sections = Array.isArray(content.sections) ? content.sections : [];
+
+  sections.forEach(sectionData => {
+    if (!sectionData || !Object.hasOwn(roots, sectionData.id)) return;
+    const section = roots[sectionData.id];
+    if (!section) return;
+    section.hidden = sectionData.visible === false;
+    document.querySelectorAll(
+      `.site-header a[href="#${sectionData.id}"], .hero-index a[href="#${sectionData.id}"]`,
+    ).forEach(link => {
+      link.hidden = sectionData.visible === false;
+    });
+
+    const eyebrow = section.querySelector('.section-label .eyebrow, .section-heading .eyebrow, :scope > .eyebrow');
+    const title = section.querySelector('.featured-heading h2, .section-heading h2, #about-title');
+    const aside = section.querySelector('.section-label .serial, .section-heading .section-aside');
+    if (eyebrow && typeof sectionData.eyebrow === 'string') eyebrow.textContent = sectionData.eyebrow;
+    if (title && typeof sectionData.title === 'string') title.textContent = sectionData.title;
+    if (aside && typeof sectionData.aside === 'string') aside.textContent = sectionData.aside;
+
+    section.querySelectorAll(':scope > .site-content-body').forEach(node => node.remove());
+    if (sectionData.id === 'resume') {
+      section.querySelector('.profile-path')?.remove();
+      section.querySelector('.featured-copy')?.remove();
+    } else if (sectionData.id === 'skills') {
+      section.querySelector('.note-list')?.remove();
+    } else if (sectionData.id === 'projects') {
+      section.querySelector('.research-block')?.remove();
+      section.querySelector('.engineering-heading')?.remove();
+      section.querySelector('.engineering-grid')?.remove();
+      section.querySelector('.content-note')?.remove();
+    } else if (sectionData.id === 'about') {
+      section.querySelector(':scope > div')?.remove();
+    }
+
+    if (sectionData.id !== 'journal' && typeof sectionData.body_markdown === 'string') {
+      const bodyContent = document.createElement('div');
+      bodyContent.className = `site-content-body site-content-body-${sectionData.id}`;
+      bodyContent.innerHTML = renderContentMarkdown(sectionData.body_markdown);
+      const heading = section.querySelector('.featured-heading, .section-heading, :scope > .eyebrow');
+      if (sectionData.id === 'about') {
+        section.insertBefore(bodyContent, section.querySelector('.about-mark'));
+      } else if (heading?.nextSibling) {
+        section.insertBefore(bodyContent, heading.nextSibling);
+      } else {
+        section.append(bodyContent);
+      }
+    }
+
+    if (sectionData.id === 'journal') {
+      section.querySelectorAll(':scope > .site-content-lede').forEach(node => node.remove());
+      if (sectionData.body_markdown) {
+        const ledeContent = document.createElement('div');
+        ledeContent.className = 'site-content-lede';
+        ledeContent.innerHTML = renderContentMarkdown(sectionData.body_markdown);
+        section.querySelector('.journal-reader')?.before(ledeContent);
+      }
+    }
+  });
+
+  const heroSection = document.querySelector('#home');
+  const orderedIds = sections
+    .filter(section => section && Object.hasOwn(roots, section.id))
+    .sort((left, right) => left.order - right.order);
+  if (heroSection && orderedIds.length) {
+    let insertionPoint = heroSection.nextElementSibling;
+    orderedIds.forEach(sectionData => {
+      const section = roots[sectionData.id];
+      if (!section) return;
+      document.querySelector('#main').insertBefore(section, insertionPoint);
+      insertionPoint = section.nextElementSibling;
+    });
+  }
+};
+
+applyPublishedSiteContent();
 
 motionToggle?.addEventListener('click', () => {
   const enabled = !motionEnabled();
   root.dataset.motion = enabled ? 'full' : 'off';
-  motionToggle.setAttribute('aria-pressed', String(enabled));
-  motionToggle.textContent = enabled ? '动效 · 开' : '动效 · 关';
+  syncAppearanceControls();
 
   if (!enabled) {
     heroInstrument?.style.removeProperty('--signal-x');
@@ -58,8 +287,8 @@ if (heroInstrument) {
 }
 
 const textWaveTargets = [...document.querySelectorAll(
-  '.featured-heading h2, .note-item h3, .project-main h3',
-)];
+  '.featured-heading h2, .note-item h3',
+)].filter(target => !target.closest('.project-card, .research-case'));
 const textWaveLayouts = new WeakMap();
 const segmenter = typeof Intl.Segmenter === 'function'
   ? new Intl.Segmenter('zh-CN', { granularity: 'grapheme' })
@@ -295,22 +524,44 @@ if (journalReader) {
     return blocks.join('\n');
   };
 
+  const latestArticleIndex = articles.length - 1;
+  const archivedArticles = articles
+    .map((article, articleIndex) => ({ article, articleIndex }))
+    .filter(entry => entry.articleIndex !== latestArticleIndex)
+    .reverse();
+
   const indexPage = `
     <article class="journal-page journal-page-index is-active" data-journal-page-panel="0" aria-labelledby="journal-index-title">
       <header class="journal-page-header">
         <span class="eyebrow">PAGE 01 / INDEX</span>
         <p>研究、工程与学习留下的真实过程。</p>
       </header>
-      <h3 id="journal-index-title">不只展示结果，也记录问题是怎样被理解的。</h3>
+      <div class="journal-index-intro">
+        <span class="journal-index-kicker">FIELD NOTES / 过程记录</span>
+        <h3 id="journal-index-title">把过程留下来，<br>让问题有迹可循。</h3>
+      </div>
       ${articles.length
-        ? `<div class="journal-index-list">${articles.map((article, articleIndex) => `
-          <button type="button" class="journal-index-card" data-journal-target="${articleIndex + 1}" aria-label="阅读手记：${escapeHtml(article.title)}">
-            <strong>${escapeHtml(article.title)}</strong><b aria-hidden="true">↗</b>
-          </button>`).join('')}
+        ? `<div class="journal-index-layout" data-count="${articles.length}" data-layout="${articles.length >= 5 ? 'archive' : 'spread'}">
+          <button type="button" class="journal-featured-note" data-journal-target="${latestArticleIndex + 1}" aria-label="阅读最新手记：${escapeHtml(articles[latestArticleIndex].title)}">
+            <span class="journal-featured-note-heading"><span>最新记录</span><span>NOTE / ${String(latestArticleIndex + 1).padStart(3, '0')}</span></span>
+            <span class="journal-featured-note-meta"><span>${escapeHtml(articles[latestArticleIndex].category || '手记')}</span><span>${escapeHtml(articles[latestArticleIndex].date || '')}</span></span>
+            <strong>${escapeHtml(articles[latestArticleIndex].title)}</strong>
+            ${articles[latestArticleIndex].summary ? `<span class="journal-featured-note-summary">${escapeHtml(articles[latestArticleIndex].summary)}</span>` : ''}
+            <span class="journal-featured-note-action">阅读全文 <b aria-hidden="true">↗</b></span>
+          </button>
+          ${archivedArticles.length
+            ? `<div class="journal-archive-list" data-count="${archivedArticles.length}" aria-label="较早的手记">${archivedArticles.map(({ article, articleIndex }) => `
+              <button type="button" class="journal-archive-entry" data-journal-target="${articleIndex + 1}" aria-label="阅读手记：${escapeHtml(article.title)}">
+                <span class="journal-archive-number">${String(articleIndex + 1).padStart(2, '0')}</span>
+                <span class="journal-archive-copy">
+                  <small><span>${escapeHtml(article.category || '手记')}</span><time>${escapeHtml(article.date || '')}</time></small>
+                  <strong>${escapeHtml(article.title)}</strong>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </button>`).join('')}</div>`
+            : ''}
         </div>
-        <button type="button" class="journal-turn journal-turn-next" data-journal-target="1">
-          <span>阅读第一篇手记</span><b aria-hidden="true">↳</b>
-        </button>`
+        `
         : '<p class="journal-empty">手记正在整理中，之后会在这里更新。</p>'}
     </article>`;
 
@@ -378,7 +629,7 @@ if (journalReader) {
   showJournalPage('0');
   if (journalStatus) {
     journalStatus.textContent = articles.length
-      ? `${articles.length} 篇手记 · 点击标题卡片阅读`
+      ? `${articles.length} 篇手记 · 最新记录与过往归档`
       : '手记内容持续整理中';
   }
 }
