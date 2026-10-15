@@ -646,8 +646,80 @@ main > section[hidden],
 }
 
 #about .site-content-body {
-  max-width: 760px;
-  margin: 28px auto 0;
+  width: 100%;
+  max-width: 820px;
+  margin: 0;
+}
+
+/* Education reads as one calm closing spread: title on the left, details on the right. */
+#about.about {
+  grid-template-columns: minmax(210px, .62fr) minmax(0, 1.38fr);
+  column-gap: clamp(36px, 7vw, 104px);
+  align-items: start;
+}
+
+#about .about-heading {
+  min-width: 0;
+}
+
+#about .about-heading h2 {
+  max-width: 280px;
+  margin: 26px 0 0;
+  color: var(--ink);
+  font-family: var(--zh-display);
+  font-size: clamp(25px, 2.5vw, 34px);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+#about .about-content {
+  display: flex;
+  min-width: 0;
+  max-width: 820px;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#about .site-content-body p,
+#about .about-fallback p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.95;
+}
+
+#about .site-content-body p + p,
+#about .about-fallback p + p {
+  margin-top: 1em;
+}
+
+#about .about-mark {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 28px;
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1;
+  transition: color .2s ease, gap .2s ease;
+}
+
+#about .about-mark span {
+  font-family: var(--body);
+  font-size: 17px;
+  transition: transform .2s ease;
+}
+
+#about .about-mark:hover {
+  color: var(--ink);
+  gap: 13px;
+}
+
+#about .about-mark:hover span {
+  transform: translate(2px, -2px);
 }
 
 .site-content-lede {
@@ -656,12 +728,59 @@ main > section[hidden],
 }
 
 @media (max-width: 760px) {
+  #about.about {
+    grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
+    column-gap: clamp(24px, 5vw, 48px);
+  }
+
+  #about .about-heading h2 {
+    margin-top: 20px;
+    font-size: clamp(23px, 3vw, 29px);
+  }
+
+  #about .site-content-body p,
+  #about .about-fallback p {
+    font-size: 13px;
+  }
+
   #skills .site-content-body ul {
     grid-template-columns: 1fr;
   }
 
   .site-content-lede {
     text-align: left;
+  }
+}
+
+@media (max-width: 580px) {
+  #about.about {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+  }
+
+  #about .about-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #about .about-heading h2 {
+    max-width: none;
+    margin: 0;
+    font-size: 26px;
+  }
+
+  #about .about-content {
+    width: 100%;
+  }
+
+  #about .site-content-body p,
+  #about .about-fallback p {
+    font-size: 12px;
+  }
+
+  #about .about-mark {
+    margin-top: 22px;
   }
 }
 

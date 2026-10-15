@@ -178,7 +178,7 @@ const applyPublishedSiteContent = () => {
       link.hidden = sectionData.visible === false;
     });
 
-    const eyebrow = section.querySelector('.section-label .eyebrow, .section-heading .eyebrow, :scope > .eyebrow');
+    const eyebrow = section.querySelector('.section-label .eyebrow, .section-heading .eyebrow, .about-heading .eyebrow, :scope > .eyebrow');
     const title = section.querySelector('.featured-heading h2, .section-heading h2, #about-title');
     const aside = section.querySelector('.section-label .serial, .section-heading .section-aside');
     if (eyebrow && typeof sectionData.eyebrow === 'string') eyebrow.textContent = sectionData.eyebrow;
@@ -197,7 +197,7 @@ const applyPublishedSiteContent = () => {
       section.querySelector('.engineering-grid')?.remove();
       section.querySelector('.content-note')?.remove();
     } else if (sectionData.id === 'about') {
-      section.querySelector(':scope > div')?.remove();
+      section.querySelector('.about-fallback')?.remove();
     }
 
     if (sectionData.id !== 'journal' && typeof sectionData.body_markdown === 'string') {
@@ -206,7 +206,7 @@ const applyPublishedSiteContent = () => {
       bodyContent.innerHTML = renderContentMarkdown(sectionData.body_markdown);
       const heading = section.querySelector('.featured-heading, .section-heading, :scope > .eyebrow');
       if (sectionData.id === 'about') {
-        section.insertBefore(bodyContent, section.querySelector('.about-mark'));
+        section.querySelector('.about-content')?.prepend(bodyContent);
       } else if (heading?.nextSibling) {
         section.insertBefore(bodyContent, heading.nextSibling);
       } else {
