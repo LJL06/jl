@@ -1,0 +1,104 @@
+/* The margin becomes a reading thread; the warm paper and text remain the focus. */
+.technical-spine { display: none; }
+.glyph-word { display: inline-block; white-space: nowrap; }
+.story-parallax { translate: 0 var(--parallax-y, 0px); }
+.story-rail {
+  position: fixed;
+  z-index: 8;
+  top: 50%;
+  left: max(18px, calc((100vw - 1240px) / 2 - 164px));
+  translate: 0 -50%;
+  width: 132px;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 12px;
+}
+.story-rail-title {
+  display: block;
+  margin-bottom: 22px;
+  font-size: 9px;
+  letter-spacing: .1em;
+}
+.story-track { position: relative; }
+.story-track::before,
+.story-track::after {
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  left: 7px;
+  width: 1px;
+  background: var(--line);
+  content: '';
+  pointer-events: none;
+}
+.story-track::after {
+  background: var(--accent);
+  transform: scaleY(var(--story-progress, 0));
+  transform-origin: top;
+}
+.story-track a {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--muted);
+}
+.story-track small { font-size: 9px; font-style: italic; }
+.story-dot {
+  display: block;
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  margin: 0 5px;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.story-track a[aria-current], .story-track a:hover { color: var(--accent); }
+.story-track a[aria-current] .story-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--line);
+}
+.story-track .is-read .story-dot { border-color: var(--accent); background: var(--accent); }
+.story-bridge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  padding-block: 34px 8px;
+  color: var(--accent);
+}
+.story-bridge p {
+  margin: 0;
+  font: 400 clamp(18px, 1.6vw, 23px)/1.5 'LXGW WenKai', 'KaiTi', serif;
+}
+html[data-language="en"] .story-bridge p { font: 500 clamp(24px, 2.1vw, 30px)/1.25 'Caveat', cursive; }
+.story-bridge-mark { flex: 0 0 140px; width: 140px; height: 42px; overflow: visible; fill: var(--accent); }
+.story-bridge-mark path { fill: none; stroke-width: 1; }
+.story-mark-base { stroke: var(--line); }
+.story-mark-drawn { stroke: var(--accent); stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--line-progress, 0)); }
+.motion-toggle:disabled { opacity: .5; cursor: default; }
+html[data-motion="off"] .story-parallax { translate: none; }
+html[data-motion="off"] .glyph-wave { transform: none; transition: none; }
+html[data-motion="off"] .scroll-reveal { opacity: 1; filter: none; transform: none; transition: none; }
+
+@media (max-width: 1599px) {
+  .story-rail { width: 16px; left: 12px; }
+  .story-rail-title, .story-label, .story-track small { display: none; }
+}
+@media (max-width: 1100px) { .story-rail { display: none; } }
+@media (max-width: 850px), (pointer: coarse) {
+  .story-parallax { translate: none; }
+  .story-bridge { padding-block: 24px 0; gap: 16px; }
+  .story-bridge-mark { flex-basis: 72px; width: 72px; height: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .story-parallax { translate: none !important; }
+  .glyph-wave { transform: none !important; transition: none !important; }
+  .js .scroll-reveal { opacity: 1; filter: none; transform: none; transition: none; }
+  .journal-page { transition: none !important; }
+}

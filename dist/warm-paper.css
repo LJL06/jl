@@ -1,0 +1,365 @@
+@import url("https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Caveat:wght@400;500;600&family=LXGW+WenKai&family=Noto+Serif+SC:wght@400;500;600;700&family=Tenor+Sans&display=swap");
+
+/* Warm-paper visual system for the personal portfolio. */
+html[data-palette="blueprint"] {
+  --paper: #f1e7da;
+  --ink: #292721;
+  --muted: #71685c;
+  --accent: #a13f04;
+  --accent-secondary: #75806f;
+  --accent-tertiary: #b58253;
+  --line: #dfd1bd;
+  --panel: #fff9f4;
+  --soft: #e9ddcd;
+  --display: "Cormorant Garamond", Georgia, serif;
+  --body: "Alegreya", "Noto Serif SC", serif;
+  --zh-display: "Noto Serif SC", serif;
+  color-scheme: light;
+  font-family: var(--body);
+}
+
+html {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 82% 8%, rgb(161 63 4 / 5%), transparent 28%),
+    linear-gradient(115deg, rgb(255 249 244 / 28%), transparent 48%);
+}
+
+body {
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.78;
+}
+
+::selection { background: #d8a875; color: #292721; }
+
+.site-atmosphere {
+  background: radial-gradient(ellipse 760px 540px at 84% 10%, rgb(117 128 111 / 7%), transparent 72%);
+}
+
+.atmosphere-grid {
+  opacity: .34;
+  background-image:
+    linear-gradient(rgb(161 63 4 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(161 63 4 / 4%) 1px, transparent 1px);
+}
+
+/* Keep the useful signal sketch, lose the unexplained polygon in the backdrop. */
+.technical-spine .spine-lattice { display: none; }
+.technical-spine { opacity: .42; }
+.technical-spine .spine-center { stroke: rgb(117 128 111 / 27%); }
+
+.site-header { border-color: var(--line); }
+.site-header nav { font-family: "Tenor Sans", var(--body); }
+.site-header nav a:hover,
+.theme-toggle:hover,
+.motion-toggle:hover,
+.language-toggle:hover { color: var(--accent); }
+.monogram span,
+.chinese-name-cn,
+.eyebrow,
+.text-link,
+.read-link,
+.about-mark { color: var(--accent); }
+
+/* A restrained handwritten Chinese accent, paired with the readable serif body. */
+html:not([data-language="en"]) .chinese-name-cn,
+html:not([data-language="en"]) .journal .section-heading h2,
+html:not([data-language="en"]) .journal-index-intro h3,
+html:not([data-language="en"]) .journal-page-article h3 {
+  font-family: "LXGW WenKai", "KaiTi", serif;
+  font-weight: 400;
+}
+html:not([data-language="en"]) .chinese-name-cn { letter-spacing: .12em; }
+
+.hero-label,
+.hero-rule,
+.site-footer { color: var(--muted); }
+.hero::before {
+  background: radial-gradient(ellipse, rgb(181 130 83 / 13%), rgb(117 128 111 / 5%) 46%, transparent 74%);
+}
+.hero-instrument {
+  border-color: #d6c5af;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at 88% 15%, rgb(181 130 83 / 12%), transparent 58%),
+    linear-gradient(138deg, #fff9f4, #f0e4d5 58%, #f8efe5);
+  box-shadow: 0 8px 28px rgb(82 61 38 / 8%);
+}
+.signal-watermark { color: var(--accent); opacity: .09; }
+.signal-grid path { stroke: rgb(113 104 92 / 21%); }
+.signal-layer-a { color: var(--accent); }
+.signal-layer-b { color: var(--accent-secondary); }
+.signal-trace { stroke: currentColor; }
+.signal-layer-a circle,
+.signal-layer-b circle { fill: currentColor; }
+.signal-axis path { stroke: rgb(113 104 92 / 47%); }
+
+.featured,
+.notes,
+.projects,
+.journal,
+.about { border-color: var(--line); }
+.featured-heading h2,
+.section-heading h2,
+.about h2,
+.journal-index-intro h3 {
+  color: var(--ink);
+  font-family: var(--zh-display);
+  font-weight: 400;
+}
+.featured-copy p,
+.project-main p,
+.about p,
+.site-content-body,
+.site-content-lede,
+.journal-article-lede { color: var(--muted); }
+.note-item,
+.project-card { border-color: var(--line); }
+.note-item:hover,
+.project-card:hover,
+.research-case:hover {
+  background-color: rgb(255 249 244 / 78%);
+}
+.note-item:hover h3,
+.project-card:hover h3,
+.featured:hover h2 { color: var(--accent); }
+.research-case {
+  border-color: var(--line);
+  background: rgb(255 249 244 / 68%);
+}
+
+.journal-reader { border-color: var(--line); }
+.journal-page { background: var(--paper); }
+.journal-page-header { border-color: var(--line); }
+.journal-pages { position: relative; }
+/* Only the visible page should define the reader height; hidden article pages must not leave blank space. */
+.journal-page:not(.is-active) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+}
+.journal-index-intro h3 {
+  max-width: 760px;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.28;
+}
+.journal-featured-note,
+.journal-archive-entry {
+  border-color: var(--line);
+  background: var(--panel);
+}
+.journal-featured-note:hover,
+.journal-archive-entry:hover {
+  background: #fff5e9;
+}
+.journal-featured-note strong,
+.journal-archive-copy strong { color: var(--ink); }
+.journal-featured-note-action,
+.journal-archive-entry > b { color: var(--accent); }
+
+/* The reading view becomes a quiet letter: centered title, one generous text measure. */
+.journal-page-article .journal-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 0 20px;
+  text-align: center;
+}
+.journal-page-article .journal-page-header p {
+  color: var(--muted);
+  font-family: "Alegreya", "Noto Serif SC", Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+}
+.journal-article-layout {
+  display: block;
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 56px 0 30px;
+}
+.journal-page-article h3 {
+  margin: 0 auto 26px;
+  color: var(--accent);
+  max-width: 680px;
+  font-family: "LXGW WenKai", "KaiTi", serif;
+  font-size: clamp(32px, 3.8vw, 46px);
+  line-height: 1.42;
+  letter-spacing: 0;
+  text-wrap: balance;
+  text-align: center;
+}
+.journal-article-lede {
+  max-width: 680px;
+  margin: 0 auto 42px;
+  color: var(--ink);
+  font-size: clamp(20px, 2.5vw, 24px);
+  font-weight: 600;
+  line-height: 1.65;
+}
+.journal-article-body {
+  max-width: 680px;
+  margin: 0 auto;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.9;
+}
+.journal-article-body p { margin: 0 0 1.55em; }
+.journal-article-body h2,
+.journal-article-body h3 {
+  margin: 1.8em 0 .7em;
+  color: var(--ink);
+  font-family: "Tenor Sans", "Noto Serif SC", Georgia, serif;
+  font-size: clamp(25px, 3.4vw, 34px);
+  line-height: 1.35;
+}
+.journal-article-body blockquote {
+  margin: 2em 0;
+  padding: 12px 20px;
+  border-left: 3px solid var(--accent);
+  background: #ffe3c0;
+  color: var(--accent-deep, #7a3303);
+  font-family: var(--zh-display);
+  font-size: 21px;
+  line-height: 1.75;
+}
+.journal-article-body mark {
+  background: linear-gradient(104deg, transparent .5%, #ffe3c0 .5%, #ffe3c0 96%, transparent 96%);
+  color: inherit;
+}
+.journal-article-body img {
+  display: block;
+  max-width: min(100%, 760px);
+  height: auto;
+  margin: 44px auto;
+  padding: 6px;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 2px 2px rgb(111 101 85 / 10%), 0 8px 24px rgb(111 101 85 / 10%);
+}
+.journal-turn { color: var(--accent); }
+
+html[data-theme="night"] {
+  --paper: #26221d;
+  --ink: #eee4d8;
+  --muted: #b8a996;
+  --accent: #e0a06d;
+  --accent-secondary: #a7aa8d;
+  --accent-tertiary: #c8976c;
+  --line: #514538;
+  --panel: #302a23;
+  --soft: #3b3228;
+  color-scheme: dark;
+  background-image: radial-gradient(ellipse at 82% 8%, rgb(224 160 109 / 7%), transparent 30%);
+}
+html[data-theme="night"] .hero-instrument {
+  border-color: var(--line);
+  background: linear-gradient(138deg, #312b24, #3b3228 58%, #302923);
+}
+html[data-theme="night"] .journal-page { background: var(--paper); }
+html[data-theme="night"] .journal-featured-note,
+html[data-theme="night"] .journal-archive-entry,
+html[data-theme="night"] .research-case { background: var(--panel); }
+html[data-theme="night"] .journal-featured-note:hover,
+html[data-theme="night"] .journal-archive-entry:hover,
+html[data-theme="night"] .note-item:hover,
+html[data-theme="night"] .project-card:hover { background: #3b3228; }
+html[data-theme="night"] .journal-article-body blockquote { background: #45372b; color: #f0c39c; }
+html[data-theme="night"] .journal-article-body mark { background: #57422f; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; line-height: 1.72; }
+  .journal-page-article .journal-page-header { padding-top: 18px; }
+  .journal-article-layout { padding-top: 38px; }
+  .journal-page-article h3 { font-size: clamp(28px, 7.5vw, 34px); line-height: 1.48; }
+  .journal-article-lede { margin-bottom: 30px; font-size: 19px; }
+  .journal-article-body { font-size: 17px; line-height: 1.82; }
+  .journal-article-body blockquote { padding: 10px 14px; font-size: 19px; }
+  .journal-article-body img { border-radius: 14px; }
+}
+
+.language-toggle {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: "Alegreya", Georgia, serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  transition: color .25s ease, border-color .25s ease, background-color .25s ease;
+}
+.language-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+html[data-motion="off"] .language-toggle { transition: none; }
+html[data-theme="night"] .language-toggle { background: var(--soft); color: var(--ink); }
+
+/* The English signature stays typographically identical in both UI languages. */
+.hero-main h1 {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: clamp(82px, 7vw, 112px);
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: .9;
+}
+.hero-main h1 em { font-style: normal; }
+
+html[data-language="en"] body { font-family: "Alegreya", Georgia, serif; }
+html[data-language="en"] .journal-index-intro h3,
+html[data-language="en"] .journal-page-article h3 {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0;
+}
+html[data-language="en"] .journal-index-intro h3 {
+  max-width: 850px;
+  font-size: clamp(48px, 5.5vw, 70px);
+  line-height: 1.08;
+}
+html[data-language="en"] .journal-page-article h3 {
+  font-size: clamp(42px, 4.8vw, 58px);
+  line-height: 1.12;
+}
+html[data-language="en"] .section-heading h2,
+html[data-language="en"] .featured-heading h2,
+html[data-language="en"] .about h2,
+html[data-language="en"] .journal-article-body h2,
+html[data-language="en"] .journal-article-body h3 {
+  font-family: "Tenor Sans", "Alegreya", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+html[data-language="en"] .journal-featured-note > strong,
+html[data-language="en"] .journal-archive-copy strong { font-family: "Tenor Sans", "Alegreya", Georgia, serif; }
+html[data-language="en"] .chinese-name-cn {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.35em;
+  font-style: normal;
+}
+
+@media (max-width: 640px) {
+  .hero-main h1 { font-size: clamp(68px, 16vw, 88px); }
+  html[data-language="en"] .journal-index-intro h3 { font-size: clamp(42px, 10vw, 56px); }
+  html[data-language="en"] .journal-page-article h3 { font-size: clamp(38px, 9vw, 46px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .language-toggle { transition-duration: .01ms; }
+}

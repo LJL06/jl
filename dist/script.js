@@ -22,7 +22,8 @@ const initialDesign = designChoices.includes(readPreference('jl-site-design'))
   : 'garden';
 const initialTheme = readPreference('jl-site-theme') === 'night' ? 'night' : 'day';
 root.classList.add('js');
-root.dataset.motion = 'full';
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+root.dataset.motion = reducedMotion.matches ? 'off' : 'full';
 root.dataset.design = initialDesign;
 root.dataset.palette = 'blueprint';
 root.dataset.theme = initialTheme;
@@ -31,19 +32,23 @@ root.dataset.titleFont = 'wenkai';
 
 const motionToggle = document.querySelector('.motion-toggle');
 const themeToggle = document.querySelector('.theme-toggle');
-const motionEnabled = () => root.dataset.motion === 'full';
+const motionEnabled = () => root.dataset.motion === 'full' && !reducedMotion.matches;
 const heroInstrument = document.querySelector('.hero-instrument');
 
 const syncAppearanceControls = () => {
+  const english = root.dataset.language === 'en';
   const isNight = root.dataset.theme === 'night';
   if (themeToggle) {
     themeToggle.setAttribute('aria-pressed', String(isNight));
-    themeToggle.setAttribute('aria-label', `切换到${isNight ? '日间' : '夜间'}模式`);
+    themeToggle.setAttribute('aria-label', english ? `Switch to ${isNight ? 'day' : 'night'} mode` : `切换到${isNight ? '日间' : '夜间'}模式`);
   }
   if (motionToggle) {
     const enabled = motionEnabled();
     motionToggle.setAttribute('aria-pressed', String(enabled));
-    motionToggle.setAttribute('aria-label', `${enabled ? '关闭' : '开启'}页面动效`);
+    motionToggle.disabled = reducedMotion.matches;
+    motionToggle.setAttribute('aria-label', reducedMotion.matches
+      ? (english ? 'Reduced motion is enabled in system settings' : '系统已启用减少动态效果')
+      : (english ? `${enabled ? 'Disable' : 'Enable'} page motion` : `${enabled ? '关闭' : '开启'}页面动效`));
   }
 };
 
@@ -54,6 +59,10 @@ themeToggle?.addEventListener('click', () => {
 });
 
 syncAppearanceControls();
+reducedMotion.addEventListener('change', () => {
+  if (reducedMotion.matches) root.dataset.motion = 'off';
+  syncAppearanceControls();
+});
 
 const escapeContentHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;',
@@ -286,29 +295,44 @@ if (heroInstrument) {
   });
 }
 
-const textWaveTargets = [...document.querySelectorAll(
-  '.featured-heading h2, .note-item h3',
-)].filter(target => !target.closest('.project-card, .research-case'));
+const textWaveTargets = new Set();
 const textWaveLayouts = new WeakMap();
 const segmenter = typeof Intl.Segmenter === 'function'
   ? new Intl.Segmenter('zh-CN', { granularity: 'grapheme' })
   : null;
 
-textWaveTargets.forEach(target => {
-  const text = target.textContent.trim();
-  const graphemes = segmenter
-    ? [...segmenter.segment(text)].map(item => item.segment)
-    : Array.from(text);
-  target.setAttribute('aria-label', text);
+function prepareTextWave(target) {
+  target.classList.remove('glyph-wave-active');
+  target.querySelectorAll('.glyph-wave, .glyph-word').forEach(node => node.replaceWith(...node.childNodes));
+  target.normalize();
+  target.setAttribute('aria-label', target.textContent.trim());
   target.classList.add('glyph-wave-target');
-  target.replaceChildren(...graphemes.map(grapheme => {
-    const glyph = document.createElement('span');
-    glyph.className = 'glyph-wave';
-    glyph.setAttribute('aria-hidden', 'true');
-    glyph.textContent = grapheme;
-    return glyph;
-  }));
-});
+  const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const fragment = document.createDocumentFragment();
+    // Keep English words together and preserve spaces and existing line breaks.
+    node.textContent.split(/(\s+|[\u3400-\u9fff])/u).filter(Boolean).forEach(part => {
+      if (/^\s+$/u.test(part)) { fragment.append(part); return; }
+      const word = document.createElement('span');
+      word.className = 'glyph-word';
+      word.setAttribute('aria-hidden', 'true');
+      // Move Latin words as a unit so handwritten joins and kerning survive.
+      const graphemes = /[A-Za-z]/.test(part) ? [part]
+        : segmenter ? [...segmenter.segment(part)].map(item => item.segment) : Array.from(part);
+      graphemes.forEach(character => {
+        const glyph = document.createElement('span');
+        glyph.className = 'glyph-wave';
+        glyph.textContent = character;
+        word.append(glyph);
+      });
+      fragment.append(word);
+    });
+    node.replaceWith(fragment);
+  });
+  cacheTextWaveLayout(target);
+}
 
 function cacheTextWaveLayout(target) {
   const glyphs = [...target.querySelectorAll('.glyph-wave')];
@@ -318,8 +342,7 @@ function cacheTextWaveLayout(target) {
   }));
 }
 
-textWaveTargets.forEach(target => {
-  cacheTextWaveLayout(target);
+function bindTextWave(target) {
   target.addEventListener('pointerenter', () => {
     if (!motionEnabled()) return;
     cacheTextWaveLayout(target);
@@ -334,7 +357,7 @@ textWaveTargets.forEach(target => {
     if (frame) return;
     frame = requestAnimationFrame(() => {
       frame = 0;
-      if (!pointer) return;
+      if (!pointer || !motionEnabled()) return;
       textWaveLayouts.get(target)?.forEach(({ glyph, x, y }) => {
         const distance = Math.hypot(x - pointer.x, (y - pointer.y) * .72);
         const displacement = Math.sin(distance / 17) * Math.exp(-distance / 74) * 2.5;
@@ -350,6 +373,22 @@ textWaveTargets.forEach(target => {
       glyph.style.removeProperty('--glyph-y');
     });
   });
+}
+
+function initializeTextWaves() {
+  document.querySelectorAll('.featured-heading h2, .note-item h3, #journal-index-title').forEach(target => {
+    if (target.closest('.project-card, .research-case')) return;
+    prepareTextWave(target);
+    if (!textWaveTargets.has(target)) {
+      textWaveTargets.add(target);
+      bindTextWave(target);
+    }
+  });
+}
+
+document.addEventListener('portfolio:languagechange', () => {
+  initializeTextWaves();
+  syncAppearanceControls();
 });
 
 const refreshTextWaveLayout = () => textWaveTargets.forEach(cacheTextWaveLayout);
@@ -637,6 +676,8 @@ if (journalReader) {
 const revealTargets = [...document.querySelectorAll(
   '.featured, .section-heading, .note-item, .research-intro, .research-case, .engineering-heading, .project-card, .journal-grid article, .about',
 )];
+
+initializeTextWaves();
 
 revealTargets.forEach((target, index) => {
   target.classList.add('scroll-reveal');
