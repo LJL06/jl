@@ -9,16 +9,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="art-direction.css">
-  <link rel="stylesheet" href="warm-paper.css">
-  <link rel="stylesheet" href="warm-story.css">
-  <link rel="stylesheet" href="warm-finish.css">
-  <script src="journal-data.js" defer></script>
-  <script src="script.js" defer></script>
-  <script src="warm-language.js" defer></script>
-  <script src="warm-story.js" defer></script>
-  <script src="warm-finish.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=4fd0bd3">
+  <link rel="stylesheet" href="art-direction.css?v=4fd0bd3">
+  <link rel="stylesheet" href="warm-paper.css?v=4fd0bd3">
+  <link rel="stylesheet" href="warm-story.css?v=4fd0bd3">
+  <link rel="stylesheet" href="warm-finish.css?v=4fd0bd3">
+  <link rel="stylesheet" href="nas-architecture.css?v=20261020-unified">
+  <script src="journal-data.js?v=4fd0bd3" defer></script>
+  <script src="script.js?v=4fd0bd3" defer></script>
+  <script src="warm-language.js?v=4fd0bd3" defer></script>
+  <script src="warm-story.js?v=4fd0bd3" defer></script>
+  <script src="warm-finish.js?v=4fd0bd3" defer></script>
+  <script src="nas-architecture.js?v=20261020-unified" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">跳至正文</a>
@@ -247,5 +249,25 @@
   </main>
 
   <footer class="site-footer wrap"><a class="monogram" href="#home" aria-label="回到顶部">jl<span>.</span></a><span>个人网站 · 项目与文章持续更新</span><span>慢一点，也没关系。</span></footer>
+  <dialog class="nas-architecture-dialog" id="nas-architecture-dialog" aria-labelledby="nas-architecture-title" aria-modal="true">
+    <div class="nas-architecture-dialog__layout">
+      <header class="nas-architecture-dialog__header">
+        <div class="nas-architecture-dialog__heading">
+          <span class="nas-architecture-dialog__eyebrow">SYSTEM MAP / RASPBERRY PI 4B</span>
+          <h2 id="nas-architecture-title" data-nas-dialog-title>树莓派 NAS 系统架构</h2>
+          <p data-nas-dialog-hint>在图内切换至“信号流”，查看组件之间的动态关系。</p>
+        </div>
+        <div class="nas-architecture-dialog__actions">
+          <button class="nas-architecture-dialog__expand" type="button" data-nas-architecture-expand aria-label="全屏查看架构图" title="全屏查看"><span data-nas-fullscreen-icon aria-hidden="true">⛶</span><span data-nas-fullscreen-label>全屏</span></button>
+          <button class="nas-architecture-dialog__close" type="button" data-nas-architecture-close aria-label="关闭架构图" title="关闭">×</button>
+        </div>
+      </header>
+      <iframe class="nas-architecture-dialog__frame" title="树莓派 NAS 交互式系统架构图" data-src="nas-architecture.html?v=20261020-unified" src="about:blank" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-downloads"></iframe>
+      <footer class="nas-architecture-dialog__footer">
+        <span data-nas-dialog-footer>FastAPI · React · SQLite · Nginx</span>
+        <span data-nas-dialog-close-hint>按 Esc 或点击 × 返回项目页</span>
+      </footer>
+    </div>
+  </dialog>
 </body>
 </html>

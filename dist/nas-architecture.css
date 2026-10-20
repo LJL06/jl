@@ -1,0 +1,267 @@
+.nas-architecture-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--line));
+  background: color-mix(in srgb, var(--paper) 76%, white 24%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: .025em;
+  text-decoration: none;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+
+.nas-architecture-trigger:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--paper) 58%, white 42%);
+}
+
+.nas-architecture-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.nas-architecture-action {
+  margin-top: 12px;
+}
+
+.nas-architecture-trigger__arrow {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform .2s ease;
+}
+
+.nas-architecture-trigger:hover .nas-architecture-trigger__arrow {
+  transform: translate(2px, -2px);
+}
+
+.nas-page-locked {
+  position: fixed;
+  inset-inline: 0;
+  top: var(--nas-scroll-lock-top, 0);
+  width: 100%;
+  overflow: hidden;
+}
+
+.nas-architecture-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(1240px, calc(100vw - 56px));
+  height: min(840px, calc(100vh - 72px));
+  height: min(840px, calc(100dvh - 72px));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 28px 90px rgb(28 21 14 / 34%);
+}
+
+.nas-architecture-dialog[open] {
+  animation: nas-architecture-enter .24s cubic-bezier(.2, .72, .25, 1) both;
+}
+
+.nas-architecture-dialog::backdrop {
+  background: rgb(25 21 17 / 62%);
+  backdrop-filter: blur(5px);
+  animation: nas-architecture-backdrop .2s ease-out both;
+}
+
+.nas-architecture-dialog__layout {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.nas-architecture-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 22px 15px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.nas-architecture-dialog__heading { min-width: 0; }
+
+.nas-architecture-dialog__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.nas-architecture-dialog__eyebrow {
+  display: block;
+  color: var(--accent);
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: .14em;
+}
+
+.nas-architecture-dialog__heading h2 {
+  margin: 5px 0 0;
+  color: var(--ink);
+  font-family: var(--zh-display, var(--body));
+  font-size: clamp(18px, 2.1vw, 24px);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.nas-architecture-dialog__heading p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.nas-architecture-dialog__close {
+  display: grid;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  padding: 0 0 3px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 27px;
+  font-weight: 300;
+  line-height: 1;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+}
+
+.nas-architecture-dialog__close:hover {
+  border-color: var(--accent);
+  background: var(--paper);
+  color: var(--accent);
+}
+
+.nas-architecture-dialog__expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 48%, var(--line));
+  border-radius: 0;
+  background: color-mix(in srgb, var(--paper) 82%, white 18%);
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+}
+
+.nas-architecture-dialog__expand:hover {
+  border-color: var(--accent);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.nas-architecture-dialog__expand:focus-visible,
+.nas-architecture-dialog__close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.nas-architecture-dialog__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  background: #f8fafc;
+}
+
+.nas-architecture-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 10px;
+  letter-spacing: .025em;
+}
+
+@keyframes nas-architecture-enter {
+  from { opacity: 0; transform: translateY(8px) scale(.992); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes nas-architecture-backdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 680px) {
+  .nas-architecture-dialog {
+    width: calc(100vw - 18px);
+    height: calc(100vh - 24px);
+    height: calc(100dvh - 24px);
+  }
+
+  .nas-architecture-dialog__header {
+    gap: 12px;
+    padding: 13px 13px 11px;
+  }
+
+  .nas-architecture-dialog__eyebrow { font-size: 9px; }
+  .nas-architecture-dialog__heading h2 { font-size: 18px; }
+  .nas-architecture-dialog__heading p { font-size: 10px; }
+  .nas-architecture-dialog__close { width: 34px; height: 34px; }
+  .nas-architecture-dialog__actions { gap: 6px; }
+  .nas-architecture-dialog__expand { width: 34px; min-height: 34px; padding: 0; font-size: 0; }
+  .nas-architecture-dialog__expand [data-nas-fullscreen-icon] { font-size: 17px; }
+
+  .nas-architecture-dialog__footer {
+    align-items: flex-start;
+    padding: 8px 10px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 380px) {
+  .nas-architecture-dialog__footer span:first-child { display: none; }
+  .nas-architecture-dialog__footer { justify-content: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nas-architecture-trigger,
+  .nas-architecture-trigger__arrow,
+  .nas-architecture-dialog__close,
+  .nas-architecture-dialog__expand { transition: none; }
+  .nas-architecture-dialog[open],
+  .nas-architecture-dialog::backdrop { animation: none; }
+}
+
+.nas-architecture-dialog:fullscreen,
+.nas-architecture-dialog.is-fullscreen-fallback {
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+}
