@@ -21,6 +21,7 @@
   <script src="warm-story.js?v=4fd0bd3" defer></script>
   <script src="warm-finish.js?v=4fd0bd3" defer></script>
   <script src="nas-architecture.js?v=20261020-unified" defer></script>
+  <script src="csi-architecture.js?v=20261026-csi1" defer></script>
   <link rel="stylesheet" href="chart-study.css?v=1">
 </head>
 <body>
@@ -267,6 +268,26 @@
       <footer class="nas-architecture-dialog__footer">
         <span data-nas-dialog-footer>FastAPI · React · SQLite · Nginx</span>
         <span data-nas-dialog-close-hint>按 Esc 或点击 × 返回项目页</span>
+      </footer>
+    </div>
+  </dialog>
+  <dialog class="nas-architecture-dialog" id="csi-architecture-dialog" aria-labelledby="csi-architecture-title" aria-modal="true">
+    <div class="nas-architecture-dialog__layout">
+      <header class="nas-architecture-dialog__header">
+        <div class="nas-architecture-dialog__heading">
+          <span class="nas-architecture-dialog__eyebrow">PROJECT MAP / WI-FI CSI</span>
+          <h2 id="csi-architecture-title" data-csi-dialog-title>Wi-Fi CSI 室内状态感知架构</h2>
+          <p data-csi-dialog-hint>图中包含 3 个 ESP32 CSI 节点；固件源码未包含在公开仓库中。</p>
+        </div>
+        <div class="nas-architecture-dialog__actions">
+          <button class="nas-architecture-dialog__expand" type="button" data-csi-architecture-expand aria-label="全屏查看架构图" title="全屏查看"><span data-csi-fullscreen-icon aria-hidden="true">⛶</span><span data-csi-fullscreen-label>全屏</span></button>
+          <button class="nas-architecture-dialog__close" type="button" data-csi-architecture-close aria-label="关闭架构图" title="关闭">×</button>
+        </div>
+      </header>
+      <iframe class="nas-architecture-dialog__frame" title="Wi-Fi CSI 室内状态感知交互式架构图" data-src="csi-architecture.html?v=20261026-csi1" src="about:blank" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-downloads"></iframe>
+      <footer class="nas-architecture-dialog__footer">
+        <span data-csi-dialog-footer>3 × ESP32 · Python / FastAPI · Node.js</span>
+        <span data-csi-dialog-close-hint>按 Esc 或点击 × 返回项目页</span>
       </footer>
     </div>
   </dialog>
