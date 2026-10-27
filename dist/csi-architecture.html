@@ -586,7 +586,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       padding: 0.75rem;
       padding-bottom: calc(0.75rem + var(--archify-nav-reserve));
     }
-    html[data-present="true"]:not([data-embed="true"]) .diagram-container > svg {
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container > .diagram-canvas > svg {
       flex: 1 1 auto;
       height: 100%;
       min-height: 0;
@@ -608,7 +608,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       max-width: var(--archify-reader-width, 1440px);
       margin: 0 auto;
     }
-    html[data-reader-narrow="true"]:not([data-present="true"]) .diagram-container > svg {
+    html[data-reader-narrow="true"]:not([data-present="true"]) .diagram-container > .diagram-canvas > svg {
       min-width: 0;
       max-width: var(--archify-diagram-max-width);
       margin-inline: auto;
@@ -3768,7 +3768,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         scrollbar-width: thin;
         scroll-behavior: smooth;
       }
-      html:not([data-embed="true"]) .diagram-container[data-wide-diagram="true"] > svg {
+      html:not([data-embed="true"]) .diagram-container[data-wide-diagram="true"] > .diagram-canvas > svg {
         min-width: 720px;
       }
       html:not([data-embed="true"]) .diagram-container[data-wide-diagram="true"] .diagram-nav,
@@ -3964,7 +3964,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
       
       html[data-present="true"]:not([data-embed="true"]) .diagram-container { padding: 0.5rem 0.5rem 3.75rem; }
-      html[data-present="true"]:not([data-embed="true"]) .diagram-container[data-wide-diagram="true"] > svg {
+      html[data-present="true"]:not([data-embed="true"]) .diagram-container[data-wide-diagram="true"] > .diagram-canvas > svg {
         width: 720px;
         height: auto;
         min-width: 720px;
@@ -4034,24 +4034,24 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         radial-gradient(circle at 1px 1px, var(--canvas-dot) 1px, transparent 1.4px) 0 0 / 20px 20px,
         var(--panel);
     }
-    html[data-preset="classic"] .diagram-container > svg .c-grid { stroke: transparent; }
-    html[data-preset="classic"][data-theme="light"] .diagram-container > svg [data-node-id] > rect:not(.c-mask) {
+    html[data-preset="classic"] .diagram-container > .diagram-canvas > svg .c-grid { stroke: transparent; }
+    html[data-preset="classic"][data-theme="light"] .diagram-container > .diagram-canvas > svg [data-node-id] > rect:not(.c-mask) {
       filter: drop-shadow(0 1px 1px rgba(17, 24, 39, 0.05)) drop-shadow(0 6px 12px rgba(17, 24, 39, 0.06));
     }
-    html[data-preset="classic"][data-theme="dark"] .diagram-container > svg [data-node-id] > rect:not(.c-mask) {
+    html[data-preset="classic"][data-theme="dark"] .diagram-container > .diagram-canvas > svg [data-node-id] > rect:not(.c-mask) {
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
     }
-    html[data-preset="classic"] .diagram-container > svg [data-edge-from] {
+    html[data-preset="classic"] .diagram-container > .diagram-canvas > svg [data-edge-from] {
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-    html[data-preset="classic"] .diagram-container > svg .c-lane-wash { fill: color-mix(in srgb, var(--text) 2.6%, transparent); }
-    html[data-preset="classic"] .diagram-container > svg .c-lane-rule { stroke: var(--panel-border); opacity: 1; }
-    html[data-preset="classic"][data-theme="dark"] .diagram-container > svg .c-lane-rule { stroke: rgba(148, 163, 184, 0.16); }
-    html[data-preset="classic"] .diagram-container > svg [data-node-id] {
+    html[data-preset="classic"] .diagram-container > .diagram-canvas > svg .c-lane-wash { fill: color-mix(in srgb, var(--text) 2.6%, transparent); }
+    html[data-preset="classic"] .diagram-container > .diagram-canvas > svg .c-lane-rule { stroke: var(--panel-border); opacity: 1; }
+    html[data-preset="classic"][data-theme="dark"] .diagram-container > .diagram-canvas > svg .c-lane-rule { stroke: rgba(148, 163, 184, 0.16); }
+    html[data-preset="classic"] .diagram-container > .diagram-canvas > svg [data-node-id] {
       transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    html[data-preset="classic"]:not([data-motion="still"]) .diagram-container > svg [data-node-id]:hover {
+    html[data-preset="classic"]:not([data-motion="still"]) .diagram-container > .diagram-canvas > svg [data-node-id]:hover {
       transform: translateY(-1.5px);
     }
 
@@ -4876,7 +4876,182 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   .diagram-container svg text[data-boundary-label] { font-size: 16px !important; }
   .diagram-container svg g[data-edge-id] > rect { transform: scale(1.55, 1.35); transform-box: fill-box; transform-origin: center; }
   .diagram-container svg rect[data-graph-role="structural-frame-label-mask"] { transform: scale(1.8, 1.5); transform-box: fill-box; transform-origin: center; }
-</style></head>
+
+    /* Keep the canvas in normal flow after the route panel is cleared. */
+    .diagram-container > .diagram-canvas { display: block; }
+    .diagram-container:has(> .route-probe:not([hidden])) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto auto;
+      gap: 0.5rem;
+      height: min(90dvh, calc(100dvh - 7rem));
+      min-height: min(18rem, calc(100dvh - 4rem));
+      padding-bottom: 1rem;
+      overflow: hidden;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) > .diagram-canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) > .diagram-canvas > svg {
+      flex: 0 0 auto;
+      width: auto !important;
+      height: 100% !important;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) > .route-probe {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "head head" "path path" "controls status";
+      position: relative;
+      inset: auto;
+      grid-column: 1;
+      grid-row: 3;
+      z-index: 12;
+      width: 100%;
+      min-width: 0;
+      margin: 0;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-head { grid-area: head; }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-path { grid-area: path; }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-journey-controls { grid-area: controls; }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-status {
+      grid-area: status;
+      align-self: center;
+      max-width: 38vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-head {
+      padding: 0.4rem 0.6rem 0.32rem;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-path {
+      min-height: 2rem;
+      padding: 0.25rem 0.48rem 0.12rem;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-journey-controls {
+      padding: 0.04rem 0.48rem 0.12rem;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-journey-controls button {
+      min-height: 1.65rem;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-status {
+      min-height: 1.1rem;
+      padding: 0.08rem 0.55rem 0.28rem;
+      line-height: 1.25;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .route-probe-node {
+      font-size: 0.68rem;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) > .route-probe:not([data-state="result"]) {
+      width: 100%;
+      min-width: 0;
+    }
+    .diagram-container:has(> .route-probe:not([hidden])) .diagram-nav {
+      position: relative;
+      grid-column: 1;
+      grid-row: 2;
+      inset: auto;
+      justify-self: stretch;
+      justify-content: flex-end;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      translate: none;
+    }
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container:has(> .route-probe:not([hidden])) {
+      display: grid;
+    }
+    @media (max-width: 720px) {
+      .diagram-container:has(> .route-probe:not([hidden])) {
+        height: min(82dvh, calc(100dvh - 6rem));
+        min-height: min(16rem, calc(100dvh - 3rem));
+        padding: 0.75rem;
+      }
+      .diagram-container:has(> .route-probe:not([hidden])) > .route-probe { max-width: 100%; }
+      .diagram-container:has(> .route-probe:not([hidden])) {
+        grid-template-rows: minmax(0, 1fr) auto auto;
+      }
+      .diagram-container:has(> .route-probe:not([hidden])) .route-probe-status {
+        max-width: 36vw;
+      }
+      .diagram-container:has(> .route-probe:not([hidden])) .route-journey-controls {
+        grid-template-columns: 2rem 2rem auto;
+      }
+      .diagram-container:has(> .route-probe:not([hidden])) .route-journey-play {
+        display: none;
+      }
+
+    }
+    /* Presentation uses one bounded stage in every route state. The canvas
+       wrapper must own the available height instead of intrinsic SVG sizing. */
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto auto;
+      align-items: stretch;
+      justify-content: stretch;
+      gap: 0.5rem;
+      height: auto;
+      min-height: 0;
+      padding: 0.75rem;
+      overflow: hidden;
+    }
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container > .diagram-canvas {
+      display: block;
+      grid-column: 1;
+      grid-row: 1;
+      align-self: stretch;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container > .diagram-canvas > svg {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      min-height: 0;
+      max-width: none;
+      margin: 0;
+    }
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container > .diagram-nav {
+      position: relative;
+      grid-column: 1;
+      grid-row: 2;
+      inset: auto;
+      width: 100%;
+      max-width: none;
+      justify-self: stretch;
+      justify-content: flex-end;
+      margin: 0;
+      translate: none;
+      transform: none;
+    }
+    html[data-present="true"]:not([data-embed="true"]) .diagram-container > .route-probe:not([hidden]) {
+      position: relative;
+      grid-column: 1;
+      grid-row: 3;
+      inset: auto;
+      width: 100%;
+      min-width: 0;
+      margin: 0;
+      transform: none;
+    }
+    </style></head>
 <body>
   <!-- Toolbar: theme, live visual style, trace motion, presentation stage, and export.
        Motion appears only for trace-enabled artifacts and has no shortcut;
@@ -4996,6 +5171,33 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read"
          data-preset-badge-editorial-plate="ARCHIFY / 图版 04">
+<div class="route-probe no-print" id="route-probe" hidden role="region" aria-labelledby="route-probe-title" data-state="idle">
+        <div class="route-probe-head">
+          <span class="route-probe-copy">
+            <span class="route-probe-eyebrow">路径</span>
+            <strong class="route-probe-title" id="route-probe-title">点击路径的起点</strong>
+          </span>
+          <span class="route-probe-actions">
+            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="查找路径起点" data-node-finder-trigger>查找起点</button>
+            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="复制已追踪路径的链接" hidden>复制链接</button>
+            <button id="route-probe-clear" type="button" aria-label="清除路径探测">清除</button>
+          </span>
+        </div>
+        <div class="route-probe-path" id="route-probe-path" aria-label="路径">
+          <span class="route-probe-placeholder">在图上点两个节点</span>
+        </div>
+        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="路径旅程控制" data-playing="false">
+          <button id="route-journey-prev" type="button" aria-label="上一个路径位置" title="上一个路径位置">&#8592;</button>
+          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="播放路径旅程" aria-pressed="false" title="播放路径旅程">
+            <span id="route-journey-play-icon" aria-hidden="true">&#9654;</span>
+            <span id="route-journey-play-label">旅程</span>
+          </button>
+          <button id="route-journey-next" type="button" aria-label="下一个路径位置" title="下一个路径位置">&#8594;</button>
+          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="显示完整路径总览" title="显示完整路径总览">总览</button>
+        </div>
+        <small class="route-probe-status" id="route-probe-status" aria-live="polite">先点起点，再点终点，沿箭头方向找路。</small>
+      </div>
+            <div class="diagram-canvas">
       <svg viewBox="0 0 1120 998" role="img" lang="zh-CN" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="signal-flow" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14">
         <title id="archify-diagram-title">Wi-Fi CSI 室内人员状态感知系统</title>
         <desc id="archify-diagram-description">集创赛历史项目 · 从 ESP32 CSI 采集到实时状态看板</desc>
@@ -5227,6 +5429,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           </g>
         </g>
       </svg>
+      </div>
+
       <p class="intent-trace-status no-print" id="intent-trace-status" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="diagram-guide no-print" id="diagram-guide" hidden role="dialog" aria-modal="false" aria-labelledby="diagram-guide-title">
         <div class="diagram-guide-head">
@@ -5326,33 +5530,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         </div>
         <div class="relationship-lens-list" id="relationship-lens-list" aria-label="关联关系"></div>
       </div>
-      <div class="route-probe no-print" id="route-probe" hidden role="region" aria-labelledby="route-probe-title" data-state="idle">
-        <div class="route-probe-head">
-          <span class="route-probe-copy">
-            <span class="route-probe-eyebrow">路径</span>
-            <strong class="route-probe-title" id="route-probe-title">点击路径的起点</strong>
-          </span>
-          <span class="route-probe-actions">
-            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="查找路径起点" data-node-finder-trigger>查找起点</button>
-            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="复制已追踪路径的链接" hidden>复制链接</button>
-            <button id="route-probe-clear" type="button" aria-label="清除路径探测">清除</button>
-          </span>
-        </div>
-        <div class="route-probe-path" id="route-probe-path" aria-label="路径">
-          <span class="route-probe-placeholder">在图上点两个节点</span>
-        </div>
-        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="路径旅程控制" data-playing="false">
-          <button id="route-journey-prev" type="button" aria-label="上一个路径位置" title="上一个路径位置">&#8592;</button>
-          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="播放路径旅程" aria-pressed="false" title="播放路径旅程">
-            <span id="route-journey-play-icon" aria-hidden="true">&#9654;</span>
-            <span id="route-journey-play-label">旅程</span>
-          </button>
-          <button id="route-journey-next" type="button" aria-label="下一个路径位置" title="下一个路径位置">&#8594;</button>
-          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="显示完整路径总览" title="显示完整路径总览">总览</button>
-        </div>
-        <small class="route-probe-status" id="route-probe-status" aria-live="polite">先点起点，再点终点，沿箭头方向找路。</small>
-      </div>
-      <div class="semantic-lens no-print" id="semantic-lens" hidden role="dialog" aria-modal="false" aria-labelledby="semantic-lens-title">
+            <div class="semantic-lens no-print" id="semantic-lens" hidden role="dialog" aria-modal="false" aria-labelledby="semantic-lens-title">
         <div class="semantic-lens-head">
           <span>
             <span class="semantic-lens-eyebrow">语义透镜</span>
@@ -6111,15 +6289,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
               var sel = rule.selectorText || '';
               if (/(^|,)\s*(svg|:root|\[data-theme|\[data-preset|\.c-|\.t-|\.a-|\.m-)/.test(sel)) {
                 out.push(rule.cssText);
-              } else if (opts.figure && sel.indexOf('.diagram-container > svg') !== -1) {
+              } else if (opts.figure && sel.indexOf('.diagram-container > .diagram-canvas > svg') !== -1) {
                 // Figures look like the Viewer canvas: keep its preset/theme paint
                 // (quiet grid, lifted nodes) by rescoping matching rules to svg.
                 var scoped = sel.split(',').map(function (part) {
-                  var at = part.indexOf('.diagram-container > svg');
+                  var at = part.indexOf('.diagram-container > .diagram-canvas > svg');
                   if (at === -1) return null;
                   var prefix = part.slice(0, at).trim();
                   try { if (prefix && !document.documentElement.matches(prefix)) return null; } catch (_) { return null; }
-                  return 'svg' + part.slice(at + '.diagram-container > svg'.length);
+                  return 'svg' + part.slice(at + '.diagram-container > .diagram-canvas > svg'.length);
                 }).filter(Boolean);
                 if (scoped.length) out.push(scoped.join(', ') + ' { ' + rule.style.cssText + ' }');
               }
@@ -9170,7 +9348,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     Archify.intentTrace = (function () {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
-      var svg = container.querySelector(':scope > svg');
+      var svg = container.querySelector(':scope > .diagram-canvas > svg');
       var status = document.getElementById('intent-trace-status');
       var namespace = 'http://www.w3.org/2000/svg';
       var activeId = null;
@@ -9430,7 +9608,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       var body = document.body;
       var shell = document.querySelector('.container');
       var diagram = document.querySelector('.diagram-container');
-      var svg = diagram && diagram.querySelector(':scope > svg');
+      var svg = diagram && diagram.querySelector(':scope > .diagram-canvas > svg');
       var header = shell && shell.querySelector('.header');
       var cards = shell && shell.querySelector('.cards');
       var viewBox = svg && svg.viewBox && svg.viewBox.baseVal;
@@ -9822,7 +10000,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     Archify.viewerChromeLayout = (function () {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
-      var svg = container && container.querySelector(':scope > svg');
+      var svg = container && container.querySelector(':scope > .diagram-canvas > svg');
       var nav = container && container.querySelector('.diagram-nav');
       var legend = svg && svg.querySelector('[data-legend]');
       var frame = 0;
@@ -9897,6 +10075,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       function eligible() {
         return Boolean(
           container && svg && nav &&
+          window.getComputedStyle(nav).position === 'absolute' &&
+          !container.querySelector(':scope > .route-probe:not([hidden])') &&
           window.innerWidth > 720 &&
           html.getAttribute('data-embed') !== 'true' &&
           (!window.matchMedia || !window.matchMedia('print').matches) &&
@@ -9987,6 +10167,10 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         frame = 0;
         scheduleLift();
         if (probingBaseline) return null;
+        // Route mode puts navigation in its own grid row; a floating-dock
+        // reserve is unnecessary and would accumulate on every transition.
+        if (window.getComputedStyle(nav).position !== 'absolute' ||
+            container.querySelector(':scope > .route-probe:not([hidden])')) return clear();
         if (!eligible()) return clear({ preserveBaseline: !cameraAtBaseline() });
 
         /* Camera transforms enlarge and translate authored paint inside the
@@ -10548,7 +10732,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           left = Math.max(left, Math.min(svgWidth * 0.42, lensEnd));
         }
         var routeReceipt = document.getElementById('route-probe');
-        if (routeReceipt && !routeReceipt.hidden && routeReceipt.hasAttribute('data-route-journey')) {
+        if (routeReceipt && !routeReceipt.hidden && routeReceipt.hasAttribute('data-route-journey') &&
+            window.getComputedStyle(routeReceipt).position === 'absolute') {
           var receiptTop = routeReceipt.offsetTop;
           var receiptBottom = receiptTop + routeReceipt.offsetHeight;
           if (receiptTop < svgHeight / 2) top = Math.max(top, receiptBottom + 24);
@@ -10729,7 +10914,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        ============================================================ */
     Archify.radar = (function () {
       var container = document.querySelector('.diagram-container');
-      var diagram = container.querySelector(':scope > svg');
+      var diagram = container.querySelector(':scope > .diagram-canvas > svg');
       var panel = document.getElementById('overview-map');
       var panelHead = panel.querySelector('.overview-map-head');
       var surface = document.getElementById('overview-map-surface');
@@ -11696,7 +11881,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       var panel = document.getElementById('node-outline');
       var list = document.getElementById('node-outline-list');
       var count = document.getElementById('node-outline-count');
-      var svg = document.querySelector('.diagram-container > svg');
+      var svg = document.querySelector('.diagram-container > .diagram-canvas > svg');
       if (!panel || !list || !svg) return { count: 0 };
       var TONES = ['frontend', 'backend', 'database', 'cloud', 'security', 'messagebus', 'external'];
       var nodes = Array.from(svg.querySelectorAll('[data-node-id]')).filter(function (node) {
@@ -11834,7 +12019,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     Archify.routeProbe = (function () {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
-      var svg = container.querySelector(':scope > svg');
+      var svg = container.querySelector(':scope > .diagram-canvas > svg');
       var trigger = document.getElementById('btn-route-probe');
       var panel = document.getElementById('route-probe');
       var title = document.getElementById('route-probe-title');
@@ -12866,7 +13051,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     Archify.semanticLens = (function () {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
-      var svg = container.querySelector(':scope > svg');
+      var svg = container.querySelector(':scope > .diagram-canvas > svg');
       var trigger = document.getElementById('btn-semantic-lens');
       var panel = document.getElementById('semantic-lens');
       var closeBtn = document.getElementById('semantic-lens-close');
@@ -13539,7 +13724,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     Archify.guide = (function () {
       var html = document.documentElement;
       var container = document.querySelector('.diagram-container');
-      var svg = container.querySelector(':scope > svg');
+      var svg = container.querySelector(':scope > .diagram-canvas > svg');
       var trigger = document.getElementById('btn-diagram-guide');
       var panel = document.getElementById('diagram-guide');
       var closeBtn = document.getElementById('diagram-guide-close');
